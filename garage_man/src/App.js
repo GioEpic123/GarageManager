@@ -1,7 +1,7 @@
 import "./App.css";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/createAccount";
-import Home from "./pages/Home";
+import Header from "./pages/Header.tsx";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -12,7 +12,7 @@ function App(){
       <Routes>
         <Route path="/" element={<Login/>}/>
         <Route path="/CreateAccount" element={<CreateAccount/>}/>
-        <Route path="/Home" element={<Home/>}/>
+        <Route path="/Header" element={<Header/>}/>
       </Routes>
     </div>
   );

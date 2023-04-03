@@ -34,7 +34,7 @@ const CreateAccount = () =>{
                 </div>
             </form>
             <button onClick={() => navigate(-1)}>Back</button>
-            <button onClick={() => navigate('/Home')}>Sign Up</button>
+            <button onClick={() => navigate('/Header')}>Sign Up</button>
         </div>
     );
 }
