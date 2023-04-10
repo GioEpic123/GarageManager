@@ -60,3 +60,10 @@ label{
   justify-content: center;
   min-height: 100vh;
 }
+.Settings{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}

@@ -50,6 +50,17 @@ const Header=()=>{
                 >
                     <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/Vehicles'}>Vehicles</Link>
                 </Button>
+                <Button
+                 
+                  sx={{
+                    fontSize: "18px",
+                    color: "#000000",
+                    marginLeft: "10px"
+                  }}
+                  variant="text"
+                >
+                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/Settings'}>Settings</Link>
+                </Button>
               </Box>
           </Toolbar>
         </AppBar>
