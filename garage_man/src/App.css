@@ -46,3 +46,17 @@ label{
   justify-content: center;
   min-height: 100vh;
 }
+.Tickets{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.Vehicles{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
