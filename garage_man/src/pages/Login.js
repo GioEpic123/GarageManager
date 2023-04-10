@@ -1,7 +1,7 @@
 import "../App.css";
 import React, { useRef, useState } from "react";
 import {useNavigate} from 'react-router-dom';
-import { Divider } from '@mui/material';
+//import { Divider } from '@mui/material';
 
 import { initializeApp } from "firebase/app";
 import {
@@ -45,8 +45,9 @@ function Login() {
   };
   return (
     <div className="Login">
-        <h1 style={{fontFamily:"Poppins"}}>Login</h1>
+        
         <form className="account-login">
+        <h1 style={{fontFamily:"Poppins"}}>Login</h1>
             <label for="email">Email: </label>
                 <input 
                 type="email"
@@ -61,9 +62,11 @@ function Login() {
                 placeholder="password">
                 </input>
                 <button onClick={signInWithGoogle}>Sign in with Google</button>
+                <br/>
+                <button className="create-account-btn" style={{fontFamily: "Poppins",background: "none", border: "none",color: "black"}} onClick={() => navigate('/CreateAccount')}>Create Account</button>
             </form>
-            <Divider></Divider>
-            <button style={{fontFamily: "Poppins",background: "none", border: "none",color: "black"}} onClick={() => navigate('/CreateAccount')}>Create Account</button>
+           
+            
         
       {/* Show Sign out button if user is logged in */}
       <section>{user ? <SignOut /> : ""}</section>

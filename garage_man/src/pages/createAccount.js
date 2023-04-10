@@ -5,8 +5,8 @@ const CreateAccount = () =>{
     const navigate = useNavigate();
     return (
         <div className="Account">
-            <h1 style={{fontFamily:"Poppins"}}>Create Account</h1>
             <form className="create-account-form">
+                <h1 className="ca-title"style={{fontFamily:"Poppins"}}>Create Account</h1>
                 <div>
                     <label for="user-email">Email: </label>
                     <input
@@ -32,9 +32,11 @@ const CreateAccount = () =>{
                     type="text"
                     class="license-plate"/>
                 </div>
+                <div className="btns">
+                    <button className="back-btn"onClick={() => navigate(-1)}>Back</button>
+                    <button className="signup-btn"onClick={() => navigate('/Home')}>Sign Up</button>
+                </div>
             </form>
-            <button onClick={() => navigate(-1)}>Back</button>
-            <button onClick={() => navigate('/Header')}>Sign Up</button>
         </div>
     );
 }

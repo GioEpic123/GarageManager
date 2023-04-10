@@ -1,10 +1,9 @@
-.App{
+.Login{
   display: flex;
   text-align: center;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  /*background-color: rgba(72,24,41,0.9);*/
 }
 .account-login{
   text-align: left;
@@ -16,16 +15,34 @@
 label{
   text-align: left;
 }
+.create-account-btn{
+  display: flex;
+}
 .Account{
-  justify-content:center;
-  width:250px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 .create-account-form{
-  display: flex;
-  flex-wrap:wrap;
   text-align: left;
+  width: 250px;
 }
 .user-email, .user-pass, .verify-pass, .license-plate{
   display: inline-block;
   width:250px;
+}
+.ca-title{
+  text-align: center;
+}
+.btns{
+ text-align: center;
+}
+.Home{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
