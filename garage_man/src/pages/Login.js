@@ -1,6 +1,6 @@
 import "../App.css";
 import React, { useRef, useState } from "react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 //import { Divider } from '@mui/material';
 
 import { initializeApp } from "firebase/app";
@@ -34,59 +34,61 @@ const auth = getAuth(app);
 // Firestore is our firestore database
 const firestore = getFirestore(app);
 
-
 // Main app to be created
 function Login() {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-  };
+
   return (
     <div className="Login">
-        
-        <form className="account-login">
-        <h1 style={{fontFamily:"Poppins"}}>Login</h1>
-            <label for="email">Email: </label>
-                <input 
-                type="email"
-                id="email"
-                placeholder="example@email.com">
-                </input>
-            <br/>
-            <label for="pass">Password: </label>
-                <input 
-                type="password"
-                id="pass"
-                placeholder="password">
-                </input>
-                <button onClick={signInWithGoogle}>Sign in with Google</button>
-                <br/>
-                <button className="create-account-btn" style={{fontFamily: "Poppins",background: "none", border: "none",color: "black"}} onClick={() => navigate('/CreateAccount')}>Create Account</button>
-            </form>
-           
-            
-        
+      {/* <form className="account-login">
+              <h1 style={{ fontFamily: "Poppins" }}>Login</h1>
+              <label for="email">Email: </label>
+              <input
+                  type="email"
+                  id="email"
+                  placeholder="example@email.com"
+              ></input>
+              <br />
+              <label for="pass">Password: </label>
+              <input type="password" id="pass" placeholder="password"></input>
+              <button onClick={signInWithGoogle}>Sign in with Google</button>
+              <br />
+              <button
+                  className="create-account-btn"
+                  style={{
+                      fontFamily: "Poppins",
+                      background: "none",
+                      border: "none",
+                      color: "black",
+                  }}
+                  onClick={() => navigate("/CreateAccount")}
+              >
+                  Create Account
+              </button>
+          </form> */}
+      <h1>Welcome! Sign in with Google to get started :)</h1>
       {/* Show Sign out button if user is logged in */}
-      <section>{user ? <SignOut /> : ""}</section>
+      <section>{user ? navigate("/CreateAccount") : <SignIn />}</section>
       {/* Show Chatroom if user is logged in, else show sign-in prompt */}
-      <section>{user ? <ChatRoom /> : signInWithGoogle}</section>
+      <section>
+        {/* TO-DO: Remove, this was for debug */}
+        <SignOut />
+      </section>
     </div>
   );
 }
 
-
 // Sign-In page used to sign user in through Google Auth
-/*function SignIn() {
-    // Nested method to sign in using Google Auth
-    const signInWithGoogle = () => {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider);
-    };
-  
-    //return <button onClick={signInWithGoogle}>Sign in with Google</button>;
-  }*/
+function SignIn() {
+  // Nested method to sign in using Google Auth
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider);
+  };
+
+  return <button onClick={signInWithGoogle}>Sign in with Google</button>;
+}
 
 // generates a Sign-Out button if user is signed in
 function SignOut() {
