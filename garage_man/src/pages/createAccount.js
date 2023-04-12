@@ -1,5 +1,5 @@
 import "../App.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -31,40 +31,88 @@ const firestore = getFirestore(app);
 // Check if the user has a vehicle by looking through the vehicles collection for
 // a vehicle with their UID associated. If none exist, prompt them to add one
 const CreateAccount = () => {
-  const navigate = useNavigate();
-  const [user] = useAuthState(auth);
+  // TO-DO: Fix this async part
 
-  // Get the collection of users with the user, if any
+  const navigate = useNavigate();
+  //Check to see if our user doc exists
+
+  // Error state default to false
+  const [error, setError] = useState(false);
+  // DocExists default to null
+  const [docExists, setDocExists] = useState(null);
+  const [loadState, setLoadState] = useState("loading");
+
+  //const [userID, setUserID] = useState(null);
+
+  // Get current user ID
+  const uid = auth.currentUser.uid;
+  // setUserID((prevState) => {
+  //   if(prevState != null)
+  //     return prevState;
+  // });
+  //setUserID(uid);
+
+  // Get reference to collection of "users", if any
   const userRef = collection(firestore, "users");
 
-  // Use promises to make function synchronus
-  // let getSnapPromise = new Promise(function (myResolve) {
-  //   // Check to see if our user doc exists
-  //   const docSnap = getDoc(userDocRef);
-  //   var exists = false;
-  //   if (docSnap.exists) {
-  //     exists = true;
-  //   }
+  // Get a reference to where our user doc would be
+  const userDocRef = doc(userRef, uid);
 
-  //   myResolve();
-  // });
+  // Effect loop:
+  // - Make call to db to get the doc
+  // - Update load state to done
+  useEffect(() => {
+    // Tell user we're loading
+    setLoadState("loading");
+    // Make async call to db
+    getDoc(userDocRef)
+      .then((docSnapshot) => {
+        // Mark that we're done, take note of doc status
+        setLoadState("done");
+        setDocExists(docSnapshot.exists());
+      })
+      .catch((err) => {
+        setLoadState("error");
+        setError(err);
+      });
+  }, []);
 
-  // getSnapPromise.then(function (exists) {
-  //   return CheckForCar(exists);
-  // });
+  if (loadState === "error") {
+    return (
+      <div>
+        <h1>Error:</h1>
+        <h2>{error}</h2>
+      </div>
+    );
+  }
 
-  // TO-DO: Fix this async part
-  // const exists = await CheckForRecord(userRef, user.uid);
-  const exists = CheckForRecord(userRef, user.uid);
+  return (
+    <div>
+      <p>{uid}</p>
+      {loadState === "loading" ? (
+        <h1>Loading</h1>
+      ) : docExists ? (
+        navigate("/home")
+      ) : (
+        <CarRegistrationForm />
+      )}
+    </div>
+  );
+};
+
+function CarRegistrationForm(uid, userRef) {
+  const navigate = useNavigate();
 
   //Reference our user state to take in form data
-  const [makeVal, modelVal, colorVal, plateVal] = useState("");
+  const [makeVal, setMakeVal] = useState("");
+  const [modelVal, setModelVal] = useState("");
+  const [colorVal, setColorVal] = useState("");
+  const [plateVal, setPlateVal] = useState("");
 
   // Nested method to publish user data on form complete
   const saveUserData = async (e) => {
     // Get the user's data
-    const uid = user.uid;
-
+    e.preventDefault();
     await addDoc(userRef, {
       createdAt: serverTimestamp(),
       uid,
@@ -73,78 +121,62 @@ const CreateAccount = () => {
   };
 
   return (
-    <div>
-      {/* Check to see if we got a record yet */}
-      {/* If so, take us home, else prompt user to input info */}
-      {/* {userDoc ? navigate("/home") : ""} */}
-      {exists ? <p>got a doc!</p> : ""}
-      <form className="create-account-form" onSubmit={saveUserData}>
-        <h1 className="ca-title" style={{ fontFamily: "Poppins" }}>
-          Welcome!
-        </h1>
-        <h2>Please set up your account by putting a vehicle on file.</h2>
-        <div>
-          <label for="user-email">Make: </label>
-          <input
-            value={makeVal}
-            type="make"
-            class="car-make"
-            placeholder="Toyota"
-          />
-        </div>
-        <div>
-          <label for="pass">Model: </label>
-          <input
-            value={modelVal}
-            type="model"
-            class="car-model"
-            placeholder="Camry"
-          />
-        </div>
-        <div>
-          <label for="pass">Color: </label>
-          <input
-            value={colorVal}
-            type="color"
-            class="car-color"
-            placeholder="Blue"
-          />
-        </div>
-        <div>
-          <label for="pass">License Plate: </label>
-          <input
-            value={plateVal}
-            type="text"
-            class="license-plate"
-            placeholder="1ABC234"
-          />
-        </div>
-        <div className="btns">
-          <button
-            className="signup-btn"
-            type="submit"
-            onClick={() => navigate("/Home")}
-          >
-            Sign Up
-          </button>
-        </div>
-      </form>
-    </div>
+    <form className="create-account-form" onSubmit={saveUserData}>
+      <h1 className="ca-title" style={{ fontFamily: "Poppins" }}>
+        Welcome!
+      </h1>
+      <h2>Please set up your account by putting a vehicle on file.</h2>
+      <div>
+        <label for="user-email">Make: </label>
+        <input
+          value={makeVal}
+          type="make"
+          class="car-make"
+          placeholder="Toyota"
+          onChange={(e) => setMakeVal(e.target.value)}
+        />
+      </div>
+      <div>
+        <label for="pass">Model: </label>
+        <input
+          value={modelVal}
+          type="model"
+          class="car-model"
+          placeholder="Camry"
+          onChange={(e) => setModelVal(e.target.value)}
+        />
+      </div>
+      <div>
+        <label for="pass">Color: </label>
+        <input
+          value={colorVal}
+          type="car-color"
+          class="car-color"
+          placeholder="Blue"
+          onChange={(e) => setColorVal(e.target.value)}
+        />
+      </div>
+      <div>
+        <label for="pass">License Plate: </label>
+        <input
+          value={plateVal}
+          type="text"
+          class="license-plate"
+          placeholder="1ABC234"
+          onChange={(e) => setPlateVal(e.target.value)}
+        />
+      </div>
+      <div className="btns">
+        <button
+          className="signup-btn"
+          type="submit"
+          onClick={() => navigate("/Home")}
+        >
+          Sign Up
+        </button>
+      </div>
+    </form>
   );
-};
-
-async function CheckForRecord(userRef, uid) {
-  // Get a reference to where our user doc would be
-  const userDocRef = doc(userRef, uid);
-
-  //Check to see if our user doc exists
-  const docSnap = await getDoc(userDocRef);
-  var exists = false;
-  if (docSnap.exists) {
-    exists = true;
-  }
-
-  return exists;
 }
 
 export default CreateAccount;
