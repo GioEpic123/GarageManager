@@ -10,9 +10,8 @@ import { Route, Routes } from "react-router-dom";
 import React from "react";
 import MainLayout from "./MainLayout.js";
 
-
-function App(){
-  return(
+function App() {
+  return (
     <div className="App">
         <Routes>
           <Route element={<PrivateRoutes/>}>
@@ -23,11 +22,11 @@ function App(){
               <Route path="/Settings" element={<Settings/>}/>
             </Route>
           </Route>
-          <Route path="/" element={<Login/>}/>
-          <Route path="/CreateAccount" element={<CreateAccount/>}/>
-        </Routes>
+        </Route>
+        <Route path="/" element={<Login />} />
+        <Route path="/CreateAccount" element={<CreateAccount />} />
+      </Routes>
     </div>
-
   );
 }
 export default App;
