@@ -24,7 +24,6 @@ const Home = () => {
   return (
     <div className="Home">
       <h1>Hello!</h1>
-      <br />
       {/* If we're logged in, show sign out, else send back to login */}
       {user ? <SignOut /> : navigate("/")}
     </div>
@@ -37,49 +36,5 @@ function SignOut() {
     auth.currentUser && <button onClick={() => auth.signOut()}>Sign Out</button>
   );
 }
-
-// // Generate the chat thread
-// function UserData() {
-
-//     // Get a reference to our user state
-//     const [user] = useAuthState(auth);
-
-//     // Get the collection associated with the user, if any
-//     const userRef = collection(firestore, user.currentUser.uid);
-
-//     // Get the last 25 messages ordered by creation time
-//     const q = query(messagesRef, orderBy("createdAt"), limit(25));
-
-//     // Use a webhook to get an array of messages from the db at runtime
-//     const [messages] = useCollectionData(q, { idField: "id" });
-
-//     const [formValue, setFormValue] = useState("");
-
-//     // A reference to a dummy variable to scroll down into
-//     const dummy = useRef();
-
-//     // Nested method to send a message (add it to message collection)
-//     const sendMessage = async (e) => {
-//     // Prevents page from refreshing on form submit
-//     e.preventDefault();
-
-//     //grab the photoURL and UID of the current user
-//     const { uid, photoURL } = auth.currentUser;
-
-//     // Adds a document to the messages collection
-//     await addDoc(messagesRef, {
-//     text: formValue,
-//     createdAt: serverTimestamp(),
-//     uid,
-//     photoURL,
-//     });
-
-//     // Clear the form once input is taken
-//     setFormValue("");
-
-//     // Scroll down to dummy (bottom) after new message
-//     dummy.current.scrollIntoView({ behavior: "smooth" });
-//     };
-// }
 
 export default Home;
