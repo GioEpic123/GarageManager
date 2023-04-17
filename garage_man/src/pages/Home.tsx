@@ -25,7 +25,7 @@ const Home = () => {
     <div className="Home">
       <h1>Hello!</h1>
       {/* If we're logged in, show sign out, else send back to login */}
-      {user ? <SignOut /> : navigate("/")}
+      {user ? <SignOut /> : () => navigate("/")}
     </div>
   );
 };
