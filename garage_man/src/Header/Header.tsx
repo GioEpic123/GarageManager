@@ -5,6 +5,21 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import {Link} from 'react-router-dom';
+import { getAuth } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+const app = initializeApp({
+  apiKey: "AIzaSyDSuLNYYqcUF8xpXHxI6Ijz8tILwshovZI",
+  authDomain: "garageman-d75af.firebaseapp.com",
+  projectId: "garageman-d75af",
+  storageBucket: "garageman-d75af.appspot.com",
+  messagingSenderId: "743378172343",
+  appId: "1:743378172343:web:2b06e5c4dbb4ccae6f5032",
+  measurementId: "G-KQZ7V1ZYJG",
+});
+const auth = getAuth(app);
+
 const Header=()=>{
   return(
     <Box sx={{ display: 'flex-end' }}>
@@ -61,6 +76,18 @@ const Header=()=>{
                 >
                     <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/Settings'}>Settings</Link>
                 </Button>
+                <Button
+                 
+                sx={{
+                  fontSize: "18px",
+                  color: "#000000",
+                  marginLeft: "10px"
+                }}
+                variant="text"
+                onClick={() => auth.signOut()}
+              >
+                  <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/'}>Sign Out</Link>
+              </Button>
               </Box>
           </Toolbar>
         </AppBar>
