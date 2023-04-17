@@ -1,7 +1,6 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 // App initialized with the following fields
@@ -20,7 +19,6 @@ const auth = getAuth(app);
 
 const Home = () => {
   const [user] = useAuthState(auth);
-  const navigate = useNavigate();
   return (
     <div className="Home">
       <h1>Hello!</h1>

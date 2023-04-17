@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import {Link} from 'react-router-dom';
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 const app = initializeApp({
   apiKey: "AIzaSyDSuLNYYqcUF8xpXHxI6Ijz8tILwshovZI",
