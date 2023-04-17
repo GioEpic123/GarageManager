@@ -1,3 +1,6 @@
+.App{
+  background-color: #E6E6E6;
+}
 .Login{
   display: flex;
   text-align: center;
@@ -5,8 +8,20 @@
   justify-content: center;
   min-height: 100vh;
 }
+#title{
+  font-family: 'Poppins';
+  letter-spacing: 4px;
+  color: #481829;
+  opacity: 0.9;
+  
+}
 .account-login{
   text-align: left;
+}
+#signup-btn{
+  display: block;
+  flex-direction: column;
+  justify-content: center;
 }
 #pass, #email{
   flex-direction: column;

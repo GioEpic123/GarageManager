@@ -24,7 +24,7 @@ const Header=()=>{
     <Box sx={{ display: 'flex-end' }}>
         <CssBaseline />
         {/* start of AppBar */}
-        <AppBar  position="static" component="nav" elevation={0}>
+        <AppBar  position="static" component="nav" elevation={0} sx={{backgroundColor:'#481829', opacity:0.9}}>
           <Toolbar>
           <Box justifyContent="flex-end" 
             alignItems="flex-end"
@@ -40,7 +40,7 @@ const Header=()=>{
                   }}
                   variant="text"
                 >
-                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/Home'}>Home</Link>
+                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "#E6E6E6"}} to={'/Home'}>Home</Link>
                 </Button>
                 <Button
                  
@@ -51,7 +51,7 @@ const Header=()=>{
                   }}
                   variant="text"
                 >
-                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/Tickets'}>Tickets</Link>
+                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "#E6E6E6"}} to={'/Tickets'}>Tickets</Link>
                 </Button>
                 <Button
                  
@@ -62,7 +62,7 @@ const Header=()=>{
                   }}
                   variant="text"
                 >
-                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/Vehicles'}>Vehicles</Link>
+                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "#E6E6E6"}} to={'/Vehicles'}>Vehicles</Link>
                 </Button>
                 <Button
                  
@@ -73,7 +73,7 @@ const Header=()=>{
                   }}
                   variant="text"
                 >
-                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/Settings'}>Settings</Link>
+                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "#E6E6E6"}} to={'/Settings'}>Settings</Link>
                 </Button>
                 <Button
                  

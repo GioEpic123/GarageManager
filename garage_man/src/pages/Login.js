@@ -26,7 +26,7 @@ function Login() {
 
   return (
     <div className="Login">
-      <h1>Welcome! Sign in with Google to get started :)</h1>
+      <h1 id="title">GARAGE MAN</h1>
       {/* Show Sign out button if user is logged in */}
       <section>{user ? navigate("/CreateAccount") : <SignIn />}</section>
     </div>

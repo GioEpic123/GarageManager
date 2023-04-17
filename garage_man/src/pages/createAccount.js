@@ -158,7 +158,7 @@ function CarRegistrationForm(userID) {
 
   // -- Return the form to input user data
   return (
-    <div>
+    <div className="Account">
       <form className="create-account-form" onSubmit={saveUserData}>
         <h1 className="ca-title" style={{ fontFamily: "Poppins" }}>
           Welcome!
