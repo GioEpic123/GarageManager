@@ -24,7 +24,7 @@ const Settings = () => {
   return (
     <div className="Settings">
       <h1>Settings</h1>
-      {user ? <SignOut /> : navigate("/")}
+      {user ? <SignOut /> : <>{navigate("/")}</>}
     </div>
   );
 };
