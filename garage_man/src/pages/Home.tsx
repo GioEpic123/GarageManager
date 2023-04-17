@@ -22,10 +22,10 @@ const Home = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   return (
+    // If we're logged in, show sign out, else send back to login
     <div className="Home">
       <h1>Hello!</h1>
-      {/* If we're logged in, show sign out, else send back to login */}
-      {user ? <SignOut /> : () => navigate("/")}
+      {user ? <SignOut /> : navigate("/")}
     </div>
   );
 };
