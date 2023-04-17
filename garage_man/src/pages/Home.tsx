@@ -25,16 +25,8 @@ const Home = () => {
     // If we're logged in, show sign out, else send back to login
     <div className="Home">
       <h1>Hello!</h1>
-      {user ? <SignOut /> : <>{navigate("/")}</>}
+      {user ? <></> : <>{navigate("/")}</>}
     </div>
   );
 };
-
-// generates a Sign-Out button if user is signed in
-function SignOut() {
-  return (
-    auth.currentUser && <button onClick={() => auth.signOut()}>Sign Out</button>
-  );
-}
-
 export default Home;
