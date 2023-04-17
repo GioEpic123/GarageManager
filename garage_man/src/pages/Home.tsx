@@ -1,6 +1,7 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 // App initialized with the following fields
@@ -19,11 +20,21 @@ const auth = getAuth(app);
 
 const Home = () => {
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
   return (
+    // If we're logged in, show sign out, else send back to login
     <div className="Home">
       <h1>Hello!</h1>
+      {user ? <SignOut /> : <>{navigate("/")}</>}
     </div>
   );
 };
+
+// generates a Sign-Out button if user is signed in
+function SignOut() {
+  return (
+    auth.currentUser && <button onClick={() => auth.signOut()}>Sign Out</button>
+  );
+}
 
 export default Home;
