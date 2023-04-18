@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Button from '@mui/material/Button';
+import {Link} from 'react-router-dom';
 
 // App initialized with the following fields
 const app = initializeApp({
@@ -26,9 +28,13 @@ function Login() {
 
   return (
     <div className="Login">
-      <h1 id="title">GARAGE MAN</h1>
-      {/* Show Sign out button if user is logged in */}
-      <section>{user ? navigate("/CreateAccount") : <SignIn />}</section>
+      <view>
+        <text>
+        <h1 id="title">GARAGE MAN</h1>
+        {/* Show Sign out button if user is logged in */}
+        <section>{user ? navigate("/CreateAccount") : <SignIn />}</section>
+        </text>
+      </view>
     </div>
   );
 }
@@ -41,7 +47,18 @@ function SignIn() {
     signInWithPopup(auth, provider);
   };
 
-  return <button onClick={signInWithGoogle}>Sign in with Google</button>;
+  return <Button
+                 
+  sx={{
+    fontSize: "18px",
+    color: "#000000",
+    border: "2px solid black"
+  }}
+  variant="text"
+  onClick={signInWithGoogle}
+  >
+    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}}>Sign in with Google</Link>
+</Button>
 }
 
 export default Login;

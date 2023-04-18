@@ -24,8 +24,12 @@ const Home = () => {
   return (
     // If we're logged in, show sign out, else send back to login
     <div className="Home">
-      <h1>Hello!</h1>
-      {user ? <></> : <>{navigate("/")}</>}
+      <view>
+        <text>
+        <h1>Hello!</h1>
+        {user ? <></> : <>{navigate("/")}</>}
+        </text>
+      </view>
     </div>
   );
 };
