@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Button from '@mui/material/Button';
+import {Link} from 'react-router-dom';
 
 // App initialized with the following fields
 //TO-DO: Find a way to make this in a single script so we don't re-reference elsewhere
@@ -23,8 +25,12 @@ const Settings = () => {
   const navigate = useNavigate();
   return (
     <div className="Settings">
-      <h1>Settings</h1>
-      {user ? <SignOut /> : <>{navigate("/")}</>}
+      <view>
+        <text>
+        <h1>Settings</h1>
+        {user ? <SignOut /> : <>{navigate("/")}</>}
+        </text>
+      </view>
     </div>
   );
 };
@@ -32,7 +38,18 @@ const Settings = () => {
 // generates a Sign-Out button if user is signed in
 function SignOut() {
   return (
-    auth.currentUser && <button onClick={() => auth.signOut()}>Sign Out</button>
+    auth.currentUser && <Button
+                 
+    sx={{
+      fontSize: "18px",
+      color: "#000000",
+      border: "2px solid black"
+    }}
+    variant="text"
+    onClick={() => auth.signOut()}
+    >
+      <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/'}>Sign Out</Link>
+  </Button>
   );
 }
 
