@@ -63,14 +63,16 @@ const CreateAccount = () => {
     // If user isn't null, take note of it's ID and make a document reference
     if (currentUser != null) {
       setUserID(currentUser.uid);
-
+      localStorage.setItem("id", currentUser.uid);
+      localStorage.setItem("name", currentUser.displayName);
+      localStorage.setItem("pic", currentUser.photoURL);
       // This reference gets lost every render, but that's okay for our usage. Use the below comment to supress warnings
       // eslint-disable-next-line
       userDocRef = doc(userRef, currentUser.uid);
     }
   }, [currentUser]);
 
-  // - useEffect gets called whenevr currentUser changes
+  // - useEffect gets called whenever currentUser changes
   useEffect(() => {
     // Make async call to db if our reference is not null
     if (userDocRef != null) {

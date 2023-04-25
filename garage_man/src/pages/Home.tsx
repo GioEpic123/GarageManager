@@ -1,30 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { initializeApp } from "firebase/app";
+import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { app } from "./Login";
 
 import {
   getFirestore,
   collection,
-  getDoc,
-  doc,
-  setDoc,
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
 
 // App initialized with the following fields
 //TO-DO: Find a way to make this in a single script so we don't re-reference elsewhere
-const app = initializeApp({
-  apiKey: "AIzaSyDSuLNYYqcUF8xpXHxI6Ijz8tILwshovZI",
-  authDomain: "garageman-d75af.firebaseapp.com",
-  projectId: "garageman-d75af",
-  storageBucket: "garageman-d75af.appspot.com",
-  messagingSenderId: "743378172343",
-  appId: "1:743378172343:web:2b06e5c4dbb4ccae6f5032",
-  measurementId: "G-KQZ7V1ZYJG",
-});
 
 const auth = getAuth(app);
 const firestore = getFirestore(app);
@@ -38,7 +26,7 @@ const Home = () => {
     <div className="Home">
       <view>
         <text>
-          <h1>Hello!</h1>
+          <h1>Hello, {localStorage.getItem("name")}!</h1>
           {user ? <TestSendTicket /> : <>{navigate("/")}</>}
         </text>
       </view>
@@ -47,7 +35,6 @@ const Home = () => {
 };
 
 function TestSendTicket() {
-  const navigate = useNavigate();
   const ticketRef = collection(firestore, "tickets");
 
   //Reference our user state to take in form data
@@ -56,15 +43,16 @@ function TestSendTicket() {
   const [duration, setDuration] = useState("");
   const [price, setPrice] = useState("");
 
+  var uid = localStorage.getItem("id");
+
   // Nested method to publish user data on form complete
   const saveTicketData = async (e) => {
     // Prevent the page from refreshing when the form is submitted
     e.preventDefault();
 
-    var uid = "Undefined ID";
-    if (currentUser) {
-      uid = currentUser.uid;
-    }
+    // if (currentUser) {
+    //   uid = currentUser.uid;
+    // }
     // Create a doc on the "tickets" collection
     await addDoc(ticketRef, {
       createdAt: serverTimestamp(),
@@ -87,6 +75,7 @@ function TestSendTicket() {
     <div className="Ticket">
       <form className="send-ticket-form" onSubmit={saveTicketData}>
         <h2>Enter sample ticket information to send it to the DB.</h2>
+        <p>UID: {uid}</p>
         <div>
           <label>Start Time: </label>
           <input
