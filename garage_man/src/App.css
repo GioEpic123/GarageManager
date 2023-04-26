@@ -82,3 +82,17 @@ label{
   justify-content: center;
   min-height: 100vh;
 }
+.activeTable {
+  border: 2px solid forestgreen;
+  width: 800px;
+}
+.inactiveTable {
+  border: 2px solid rgb(159, 0, 0);
+  width: 800px;
+}
+th {
+  border-bottom: 1px solid black;
+}  
+td {
+  text-align: center;
+}
