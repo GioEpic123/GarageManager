@@ -12,7 +12,7 @@ import {
 //const auth = getAuth(app);
 const firestore = getFirestore(app);
 
-//constructor for ticket data type
+//constructor for ticket data type, probably not needed anymore
 export class TicketInfo {
   constructor(
     public date: Date = new Date,
@@ -25,21 +25,8 @@ export class TicketInfo {
 }
 //create ticket type that has date(Date), startTime(time), duration(int), active(bool), and price(double)
 
-//array that holds the tickets
+//array that holds the tickets, probably not needed anymore
 const ticketData: TicketInfo[]=[];
-
-  //placeholder tickets
-  const ticket1 = new TicketInfo( new Date("2023-04-13T08:00:00"), new Date("2018-01-01T08:00:00"), new Date("2018-01-01T10:00:00"), false, 25.00)
-  const ticket2 = new TicketInfo( new Date("2023-07-13T08:00:00"), new Date("2018-01-01T10:30:00"), new Date("2018-01-01T12:30:00"), true, 40.75)
-  const ticket3 = new TicketInfo( new Date("2023-09-13T08:00:00"), new Date("2018-01-01T06:45:00"), new Date("2018-01-01T08:45:00"), false, 10.50)
-  const ticket4 = new TicketInfo( new Date("2023-12-31T08:00:00"), new Date("2018-01-01T04:37:00"), new Date("2018-01-01T06:37:00"), true, 37.47)
-  const ticket5 = new TicketInfo( new Date("2023-12-31T08:00:00"), new Date("2018-01-01T04:37:00"), new Date("2018-01-01T06:37:00"), false, 37.47)
-
-  ticketData.push(ticket1)
-  ticketData.push(ticket2)
-  ticketData.push(ticket3)
-  ticketData.push(ticket4)
-  ticketData.push(ticket5)
 
 const Tickets = () => {
   const [loadState, setLoadState] = useState("loading");
@@ -95,18 +82,18 @@ const Tickets = () => {
             <th>Check-Out</th>
             <th>Payment</th>
           </tr>
-          {ticketData.map((val, key) => {
-          if(val.active == true){
-          let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
-          let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
-          let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
-            return (
-              <tr key={key}>
-                <td>{dateMDY}</td>
-                <td>{checkInTime}</td>
-                <td>{checkOutTime}</td>
-                <td>{String(val.price)}</td>
-              </tr>
+          {snapshot.docs.map((val, key) => {
+          if(val.data().active == true){
+          //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
+          //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
+          //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
+          return (
+            <tr key={key = val.ID}>
+              <td>{String(val.data().createdAt)}</td>
+              <td>{String(val.data().startTime)}</td>
+              <td>{String(val.data().endTime)}</td>
+              <td>{String(val.data().price)}</td>
+            </tr>
             )
           }})}
           </table>
@@ -118,18 +105,18 @@ const Tickets = () => {
             <th>Check-Out</th>
             <th>Payment</th>
           </tr>
-          {ticketData.map((val, key) => {
-          if(val.active == false){
-          let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
-          let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
-          let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
-            return (
-              <tr key={key}>
-                <td>{dateMDY}</td>
-                <td>{checkInTime}</td>
-                <td>{checkOutTime}</td>
-                <td>{String(val.price)}</td>
-              </tr>
+          {snapshot.docs.map((val, key) => {
+          if(val.data().active == false){
+          //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
+          //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
+          //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
+          return (
+            <tr key={key = val.ID}>
+              <td>{String(val.data().createdAt)}</td>
+              <td>{String(val.data().startTime)}</td>
+              <td>{String(val.data().endtime)}</td>
+              <td>{String(val.data().price)}</td>
+            </tr>
             )
           }})}
           </table>
