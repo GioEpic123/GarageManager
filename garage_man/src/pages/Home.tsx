@@ -51,6 +51,32 @@ function TestSendTicket() {
 
   const [show, setShow] = useState(false);
   const [showReservation, setShowReservation] = useState(false);
+  const [reservationStat, setReservationStat] = useState("No Reservation")
+  useEffect(() => {
+    if(reservationStat === "reservation"){
+      //setDuration(calculateDuaration())
+    
+      // Create a doc on the "tickets" collection
+      addDoc(ticketRef, {
+        createdAt: serverTimestamp(),
+        startTime: startTime,
+        endTime: endTime,
+        active: active,
+        duration: duration,
+        price: price,
+        ID: uid,
+      }).then(() => {}).catch((err) =>{});
+  
+      // Once we're done adding, set all values to nothing
+      setStartTime("");
+      //setActive(false);
+      setEndTime("");
+      //setDuration("");
+      setPrice("");
+      setReservationStat("No Reservation")
+    }
+    
+  }, [reservationStat]);
   // Nested method to publish user data on form complete
   const saveTicketData = async (e) => {
     // Prevent the page from refreshing when the form is submitted
@@ -61,7 +87,7 @@ function TestSendTicket() {
     // Create a doc on the "tickets" collection
     await addDoc(ticketRef, {
       createdAt: serverTimestamp(),
-      startTime: serverTimestamp,
+      startTime: serverTimestamp(),
       active: active,
       duration: duration,
       price: price,
@@ -75,7 +101,7 @@ function TestSendTicket() {
     setPrice("");
   };
   //publishes reservation data
-  const saveReservationtData = async (e) => {
+  /*const saveReservationtData = async (e) => {
     // Prevent the page from refreshing when the form is submitted
     e.preventDefault();
     //setDuration(calculateDuaration())
@@ -98,7 +124,7 @@ function TestSendTicket() {
     //setDuration("");
     setPrice("");
     
-  };
+  };*/
   const handleConfirm = (e) => {
     //e.preventDefault();
     saveTicketData(e);
@@ -113,7 +139,8 @@ function TestSendTicket() {
     var duration = Number(endSplit[0]) - Number(startSplitHr[0])
     e.preventDefault()
     setDuration(duration.toString());
-    saveReservationtData(e);
+    //saveReservationtData(e);
+    setReservationStat("reservation")
   }
   
 
