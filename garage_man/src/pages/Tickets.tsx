@@ -66,7 +66,6 @@ const Tickets = () => {
       </div>
     );
   }
-
   // Show a loading screen while we load, and show our tickets when we get them
   return (
     <div className="Tickets">
@@ -98,6 +97,7 @@ const Tickets = () => {
                       <td>{String(val.data().startTime)}</td>
                       <td>{String(val.data().endTime)}</td>
                       <td>{String(val.data().price)}</td>
+                      <td><button>Delete</button></td>
                     </tr>
                   );
                   //}
@@ -122,6 +122,7 @@ const Tickets = () => {
                       <td>{String(val.data().startTime)}</td>
                       <td>{String(val.data().endtime)}</td>
                       <td>{String(val.data().price)}</td>
+                      <td><button>Delete</button></td>
                     </tr>
                   );
                   //}
