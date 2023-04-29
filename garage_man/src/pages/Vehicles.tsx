@@ -33,60 +33,63 @@ function CarUpdateForm(userID) {
         car: { make: makeVal, model: modelVal, color: colorVal, plate: plateVal },
         });
         window.location.reload();
-        };
+    };
     
-    // -- Return the form to input user data
-    return (
+// -- Return the form to input user data
+return (
+    <div>
+    <form onSubmit={saveUserData}>
+    <view>
+    <text>
+        <h2>Would you like to update your Vehicle Information?</h2>
         <div>
-        <form className="create-account-form" onSubmit={saveUserData}>
-            <h2>Would you like to update your Vehicle Information?</h2>
-            <div>
-            <label>Make: </label>
-            <input
-                value={makeVal}
-                type="text"
-                placeholder="Toyota"
-                onChange={(e) => setMakeVal(e.target.value)}
-            />
-            </div>
-            <div>
-            <label>Model: </label>
-            <input
-                value={modelVal}
-                type="text"
-                placeholder="Camry"
-                onChange={(e) => setModelVal(e.target.value)}
-            />
-            </div>
-            <div>
-            <label>Color: </label>
-            <input
-                value={colorVal}
-                type="text"
-                placeholder="Blue"
-                onChange={(e) => setColorVal(e.target.value)}
-            />
-            </div>
-            <div>
-            <label>License Plate: </label>
-            <input
-                value={plateVal}
-                type="text"
-                placeholder="1ABC234"
-                onChange={(e) => setPlateVal(e.target.value)}
-            />
-            </div>
-            <div className="btns">
-            <button className="signup-btn" type="submit">
-                Update Car
-            </button>
-            </div>
-        </form>
+        <label>Make: </label>
+        <input
+            value={makeVal}
+            type="text"
+            placeholder="Toyota"
+            onChange={(e) => setMakeVal(e.target.value)}
+        />
         </div>
-        );
-    }
+        <div>
+        <label>Model: </label>
+        <input
+            value={modelVal}
+            type="text"
+            placeholder="Camry"
+            onChange={(e) => setModelVal(e.target.value)}
+        />
+        </div>
+        <div>
+        <label>Color: </label>
+        <input
+            value={colorVal}
+            type="text"
+            placeholder="Blue"
+            onChange={(e) => setColorVal(e.target.value)}
+        />
+        </div>
+        <div>
+        <label>License Plate: </label>
+        <input
+            value={plateVal}
+            type="text"
+            placeholder="1ABC234"
+            onChange={(e) => setPlateVal(e.target.value)}
+        />
+        </div>
+        <div className="btns">
+        <button className="signup-btn" type="submit">
+            Update Car
+        </button>
+        </div>
+        </text>
+        </view>
+    </form>
+    </div>
+    );
+}
     
-
 const Vehicles=()=>{
     const [loadState, setLoadState] = useState("loading");
     const [snapshot, setSnapshot] = useState({});
@@ -111,7 +114,7 @@ const Vehicles=()=>{
           });
       }, []);
       return(
-        <div className="Vehicles">
+    <div className="Vehicles">
       {loadState === "loading" ? (
         <h2>Loading...</h2>
       ) : snapshot.docs.length === 0 ? (
@@ -125,9 +128,9 @@ const Vehicles=()=>{
                     <text>
                     <h1>Vehicles</h1>
                     <h1>Current Vehicle Info:</h1>
-                    <p>Color: {doc.data().car.color}</p>
                     <p>Make: {doc.data().car.make}</p>
                     <p>Model: {doc.data().car.model}</p>
+                    <p>Color: {doc.data().car.color}</p>
                     <p>Plate: {doc.data().car.plate}</p>
                     <CarUpdateForm />
                     </text>
@@ -135,10 +138,10 @@ const Vehicles=()=>{
                 
             </div>
         )
-        })}
-</section>
-)}
-</div>
+    })}
+    </section>
+    )}
+    </div>
 )}
 
 

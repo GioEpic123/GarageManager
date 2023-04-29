@@ -73,7 +73,7 @@ label{
   text-align: center;
   align-items: center;
   justify-content: center;
-  min-height: 94vh;
+  min-height: 100vh;
 }
 .Settings{
   display: flex;
