@@ -63,10 +63,8 @@ const Tickets = () => {
 
   //creating useEffect for updating active status
   useEffect(() => {
-    console.log("woooaaahhh");
     if(updateStatus === "update"){
       // Make your API Call here
-      console.log("hello");
       const update = async () => {
         //console.log(toUpdate);
         //looking for the doc reference according to the id we had set as toUpdate 
