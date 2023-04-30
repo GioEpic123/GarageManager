@@ -59,31 +59,32 @@ const Tickets = () => {
         setLoadState("Error");
         setError(err);
       });
-  }, []);
+  }, [toUpdate, updateStatus]);
 
   //creating useEffect for updating active status
   useEffect(() => {
+    console.log("woooaaahhh");
     if(updateStatus === "update"){
       // Make your API Call here
-      //console.log(snapshot);
-      const update = async() => {
+      console.log("hello");
+      const update = async () => {
         //console.log(toUpdate);
         //looking for the doc reference according to the id we had set as toUpdate 
         //needed to do a ref instead of the snapshot
         //issue; updating but does not rerender when it does update 
         var reference = snapshot.docs.find(doc => {return doc.id === toUpdate}).ref;
         console.log(reference);
-        updateDoc(reference, {
+        await updateDoc(reference, {
           active: "no",
           price: 5,
-        }).then().catch((err) => {
-        
-        })
+        });
+
+        setUpdateStatus("noUpdate")
       }
-      update();
-      setUpdateStatus("noUpdate");
+      update().catch(console.error);
+      
     }
-  }, []);
+  }, [snapshot.docs, toUpdate, updateStatus]);
 
   // If we encounter an error, catch it here
   if (loadState === "Error") {
