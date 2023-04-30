@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { app } from "./Login";
+import {doc, updateDoc} from "firebase/firestore";
 
 import {
   getFirestore,
@@ -8,9 +9,12 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import { Help } from "@material-ui/icons";
 
 //const auth = getAuth(app);
 const firestore = getFirestore(app);
+
+// const ticketRef = collection(firestore, "tickets");
 
 //constructor for ticket data type, probably not needed anymore
 export class TicketInfo {
@@ -31,6 +35,9 @@ const Tickets = () => {
   const [loadState, setLoadState] = useState("loading");
   const [snapshot, setSnapshot] = useState({});
   const [error, setError] = useState("");
+  //Creating a variable to track the update status and we want to store that in a hook somewhere
+  const [updateStatus, setUpdateStatus] = useState("noUpdate");
+  
 
   // useEffect - gets called on page first render (since dependancies are empty)
   useEffect(() => {
@@ -51,6 +58,19 @@ const Tickets = () => {
         setError(err);
       });
   }, []);
+
+  //creating useEffect for updating active status
+  useEffect(() => {
+    if(updateStatus === "update"){
+      // Make your API Call here
+      updateDoc(snapshot.docs.Ticket, {
+        active: "no",
+        price: 5,
+      }).then().catch((err) => {
+
+      })
+    }
+  }, [updateStatus]);
 
   // If we encounter an error, catch it here
   if (loadState === "Error") {
@@ -86,9 +106,11 @@ const Tickets = () => {
                   <th>Check-In</th>
                   <th>Check-Out</th>
                   <th>Payment</th>
+                  <th>Cancel Ticket</th>
                 </tr>
+                
                 {snapshot.docs.map((val, key) => {
-                  //if (val.data().active == true) {
+                  if (val.data().active === "yes") {
                   //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
                   //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
                   //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
@@ -98,11 +120,25 @@ const Tickets = () => {
                       <td>{String(val.data().startTime)}</td>
                       <td>{String(val.data().endTime)}</td>
                       <td>{String(val.data().price)}</td>
+                      <td><button
+                      onClick={() => {
+                        const confirmBox =window.confirm(
+                          "Are you sure you want to cancel your ticket?"
+                        )
+                        //FIXME!!!!!!!!!!!!!!!!!
+                        if(confirmBox === true){
+                          setUpdateStatus("update");
+                          //val.data().setActive("no")
+                        }
+                      }}>
+                      Cancel
+                      </button></td>
                     </tr>
                   );
-                  //}
-                })}
+                  }
+                })}  
               </table>
+
               <h1>Inactive Tickets</h1>
               <table className="inactiveTable">
                 <tr>
@@ -112,7 +148,7 @@ const Tickets = () => {
                   <th>Payment</th>
                 </tr>
                 {snapshot.docs.map((val, key) => {
-                  //if (val.data().active == false) {
+                  if (val.data().active === "no") {
                   //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
                   //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
                   //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
@@ -124,7 +160,7 @@ const Tickets = () => {
                       <td>{String(val.data().price)}</td>
                     </tr>
                   );
-                  //}
+                  }
                 })}
               </table>
             </text>
@@ -136,3 +172,7 @@ const Tickets = () => {
 };
 
 export default Tickets;
+function setData(arg0: any) {
+  throw new Error("Function not implemented.");
+}
+
