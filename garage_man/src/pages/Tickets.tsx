@@ -74,7 +74,7 @@ const Tickets = () => {
         var reference = snapshot.docs.find(doc => {return doc.id === toUpdate}).ref;
         console.log(reference);
         updateDoc(reference, {
-          active: "yes",
+          active: "no",
           price: 5,
         }).then().catch((err) => {
         
@@ -144,7 +144,6 @@ const Tickets = () => {
                         if(confirmBox === true){
                           setToUpdate(val.id);
                           setUpdateStatus("update");
-                          //val.data().setActive("no")
                         }
                       }}>
                       Cancel
