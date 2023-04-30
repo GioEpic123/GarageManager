@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useDebugValue } from "react";
 import { app } from "./Login";
 import {doc, updateDoc} from "firebase/firestore";
 
@@ -37,6 +37,7 @@ const Tickets = () => {
   const [error, setError] = useState("");
   //Creating a variable to track the update status and we want to store that in a hook somewhere
   const [updateStatus, setUpdateStatus] = useState("noUpdate");
+  const [toUpdate, setToUpdate] = useState(0);
   
 
   // useEffect - gets called on page first render (since dependancies are empty)
@@ -52,6 +53,7 @@ const Tickets = () => {
         // Save our reslts and mark as finished
         setSnapshot(querySnapshot);
         setLoadState("done");
+        console.log(querySnapshot);
       })
       .catch((err) => {
         setLoadState("Error");
@@ -63,14 +65,25 @@ const Tickets = () => {
   useEffect(() => {
     if(updateStatus === "update"){
       // Make your API Call here
-      updateDoc(snapshot.docs.Ticket, {
-        active: "no",
-        price: 5,
-      }).then().catch((err) => {
-
-      })
+      //console.log(snapshot);
+      const update = async() => {
+        //console.log(toUpdate);
+        //looking for the doc reference according to the id we had set as toUpdate 
+        //needed to do a ref instead of the snapshot
+        //issue; updating but does not rerender when it does update 
+        var reference = snapshot.docs.find(doc => {return doc.id === toUpdate}).ref;
+        console.log(reference);
+        updateDoc(reference, {
+          active: "yes",
+          price: 5,
+        }).then().catch((err) => {
+        
+        })
+      }
+      update();
+      setUpdateStatus("noUpdate");
     }
-  }, [updateStatus]);
+  }, []);
 
   // If we encounter an error, catch it here
   if (loadState === "Error") {
@@ -120,6 +133,8 @@ const Tickets = () => {
                       <td>{String(val.data().startTime)}</td>
                       <td>{String(val.data().endTime)}</td>
                       <td>{String(val.data().price)}</td>
+                      <td>{String(val.data().active)}</td>
+                      
                       <td><button
                       onClick={() => {
                         const confirmBox =window.confirm(
@@ -127,6 +142,7 @@ const Tickets = () => {
                         )
                         //FIXME!!!!!!!!!!!!!!!!!
                         if(confirmBox === true){
+                          setToUpdate(val.id);
                           setUpdateStatus("update");
                           //val.data().setActive("no")
                         }
@@ -158,6 +174,7 @@ const Tickets = () => {
                       <td>{String(val.data().startTime)}</td>
                       <td>{String(val.data().endtime)}</td>
                       <td>{String(val.data().price)}</td>
+                      <td>{String(val.data().active)}</td>
                     </tr>
                   );
                   }
