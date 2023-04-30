@@ -98,7 +98,6 @@ const Tickets = () => {
       </div>
     );
   }
-
   // Show a loading screen while we load, and show our tickets when we get them
   return (
     <div className="Tickets">

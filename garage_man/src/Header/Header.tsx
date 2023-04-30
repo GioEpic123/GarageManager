@@ -85,7 +85,7 @@ const Header=()=>{
                 variant="text"
                 onClick={() => auth.signOut()}
               >
-                  <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "black"}} to={'/'}>Sign Out</Link>
+                  <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "#E6E6E6"}} to={'/'}>Sign Out</Link>
               </Button>
               </Box>
           </Toolbar>
