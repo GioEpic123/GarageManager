@@ -96,3 +96,12 @@ th {
 td {
   text-align: center;
 }
+#pricing-info{
+  border: black solid 0.5px;
+  background-color: #d4d0d0df;
+  border-radius: 5px;
+}
+input[type="radio"]{
+  display:block;
+  clear:none;
+}
