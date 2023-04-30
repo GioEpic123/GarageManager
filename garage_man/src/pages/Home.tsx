@@ -20,7 +20,7 @@ import { calculateBackoffMillis } from "@firebase/util";
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 const { currentUser } = auth;
-
+const availableTimes =  ["09:30", "11:00", "12:30", "14:00", "15:30", "17:00", "18:30", "20:00", "21:30", "23:00"];
 const Home = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
@@ -44,8 +44,9 @@ function TestSendTicket() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [active, setActive] = useState(true);
+  const [date, setDate] = useState("")
   const [duration, setDuration] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
 
   var uid = localStorage.getItem("id");
 
@@ -54,13 +55,13 @@ function TestSendTicket() {
   const [reservationStat, setReservationStat] = useState("No Reservation")
   useEffect(() => {
     if(reservationStat === "reservation"){
-      //setDuration(calculateDuaration())
-    
+
       // Create a doc on the "tickets" collection
       addDoc(ticketRef, {
         createdAt: serverTimestamp(),
         startTime: startTime,
         endTime: endTime,
+        date: date,
         active: active,
         duration: duration,
         price: price,
@@ -69,10 +70,10 @@ function TestSendTicket() {
   
       // Once we're done adding, set all values to nothing
       setStartTime("");
-      //setActive(false);
+      setActive(true);
       setEndTime("");
       //setDuration("");
-      setPrice("");
+      setPrice(0);
       setReservationStat("No Reservation")
     }
     
@@ -98,7 +99,7 @@ function TestSendTicket() {
     setStartTime("");
     //setActive(false);
     setDuration("");
-    setPrice("");
+    setPrice(0);
   };
   //publishes reservation data
   /*const saveReservationtData = async (e) => {
@@ -132,14 +133,24 @@ function TestSendTicket() {
   const handleDuration =(e)=>{
     //e.preventDefault();
     var endSplit = endTime.split(':');
-    var startSplitTime = startTime.split('T');
-    var startSplitHr = startSplitTime[1].split(':');
-    console.log(endSplit[0])
-    console.log(startSplitHr[0])
-    var duration = Number(endSplit[0]) - Number(startSplitHr[0])
+    var startSplit = startTime.split(':');
+    
+    var duration = Number(endSplit[0]) - Number(startSplit[0]);
+    //If the hour duration is greater than 0 AND the minute duration is greater than or equal to 0,
+    //set the price to $10 * duration time + $5 flat fee
+    if(duration > 0 && (Number(endSplit[1]) - Number(startSplit[1])) >= 0){
+      setPrice((10 * duration) + 5)
+    }
+    else if(duration < 0 ){
+      console.log(duration);
+      duration = Number(startSplit[0]) - Number(endSplit[0])
+      setPrice((10 * duration) + 5)
+    }
     e.preventDefault()
     setDuration(duration.toString());
+    //setPrice((10 * duration) + 5);
     //saveReservationtData(e);
+    setActive(false)
     setReservationStat("reservation")
   }
   
@@ -164,11 +175,21 @@ function TestSendTicket() {
     {showReservation &&
      <div>
       <form className="create-reservation">
-        <label htmlFor="start-time">Choose start of reservation: </label>
-        <input type="datetime-local" id="start-time"value={startTime} onChange={(e) => setStartTime(e.target.value)}></input>
+        <p><strong>Price: $10/hr + $5 flat fee</strong></p>
+        <label htmlFor="reservation-date">Choose Reservation Date</label>
+        <input type="date" id="reservation-date" value={date} onChange={(e) => setDate(e.target.value)}></input>
         <br/>
+
+        <label htmlFor="start-time">Choose start of reservation: </label>
+        <input type="time" id="start-time"value={startTime} onChange={(e) => setStartTime(e.target.value)} list="avail"></input>
+        <br/>
+
         <label htmlFor="end-time">Choose end of reservation: </label>
-        <input type="time" id="end-time"value={endTime} onChange={(e) => setEndTime(e.target.value)}></input>
+        <input type="time" id="end-time"value={endTime} onChange={(e) => setEndTime(e.target.value)} list="avail"></input>
+        <datalist id="avail">
+          {availableTimes.map((op, i) => <option>{op}</option>)}
+        </datalist>
+        <br/>
         <button type="submit" onClick={handleDuration}>Confirm</button>
       </form>
        
