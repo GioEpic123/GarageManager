@@ -55,7 +55,6 @@ const Tickets = () => {
         var reference = snapshot.docs.find((doc) => {
           return doc.id === toUpdate;
         }).ref;
-        console.log(reference);
         await updateDoc(reference, {
           active: false,
           price: 5,
@@ -125,7 +124,7 @@ const Tickets = () => {
                          <td>{dateMDY}</td>
                          <td>{String(val.data().date)}</td>
                          <td>{checkInTime}</td>
-                         <td>{checkOutTime}</td>
+                         <td>{String(val.data().endTime)}</td>
                          <td>{String(val.data().price)}</td>
 
 
