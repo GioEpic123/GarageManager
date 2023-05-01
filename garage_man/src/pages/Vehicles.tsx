@@ -72,6 +72,7 @@ return (
         <div>
         <label>License Plate: </label>
         <input
+            maxLength={7}
             value={plateVal}
             type="text"
             placeholder="1ABC234"

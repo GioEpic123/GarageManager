@@ -120,11 +120,20 @@ const Tickets = () => {
                       ).padStart(2, "0")} AM`;
                     }
                     else{
-                      checkInTime = `${new Date(
-                        val.data().startTime.seconds * 1000
-                      ).getHours() - 12}:${String(
-                        new Date(val.data().startTime.seconds * 1000).getMinutes()
-                      ).padStart(2, "0")} PM`;
+                      if(new Date(val.data().startTime.seconds * 1000).getHours() == 12){
+                        checkInTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours()}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
+                      else{
+                        checkInTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
                     }
                     
                     if(new Date(val.data().startTime.seconds * 1000).getHours()+1 < 12 || 
@@ -249,13 +258,21 @@ const Tickets = () => {
                       ).padStart(2, "0")} AM`;
                     }
                     else{
-                      checkInTime = `${new Date(
-                        val.data().startTime.seconds * 1000
-                      ).getHours() - 12}:${String(
-                        new Date(val.data().startTime.seconds * 1000).getMinutes()
-                      ).padStart(2, "0")} PM`;
+                      if(new Date(val.data().startTime.seconds * 1000).getHours() == 12){
+                        checkInTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours()}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
+                      else{
+                        checkInTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
                     }
-                    
                     if(new Date(val.data().startTime.seconds * 1000).getHours()+1 < 12 || 
                       new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
                       if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
