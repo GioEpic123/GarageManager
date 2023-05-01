@@ -119,18 +119,21 @@ function TestSendTicket() {
     var duration = Number(endSplit[0]) - Number(startSplit[0]);
     //If the hour duration is greater than 0 AND the minute duration is greater than or equal to 0,
     //set the price to $10 * duration time + $5 flat fee
-    if(duration > 0 && (Number(endSplit[1]) - Number(startSplit[1])) >= 0){
+    if(duration > 0 && (Number(endSplit[1]) - Number(startSplit[1])) == 0){
       setPrice((10 * duration) + 5)
-      
     }
+    // Ex. 9:30-11:00 => 11-9 = 2hrs, 00-30 = -30 minutes => user stayed for 1.5hrs => $15 + 5 = $20
     else if((Number(endSplit[1]) - Number(startSplit[1])) < 0){
-      if((Number(endSplit[1]) - Number(startSplit[1]))){
-        duration = duration + 0.5
-      }
-      else{
-        duration = duration - 0.5
-      }
+      duration = duration - 0.5
       setPrice((10 * duration) + 5)
+      console.log(duration
+      )
+    }
+    // Ex. 9:00 - 11:30 => 11-9 - 2hrs, 30-00 = 30 minutes => user stayed for 2.5 hrs => $25 + 5 = 30
+    else if(Number(endSplit[1]) - Number(startSplit[1]) > 0){
+      duration = duration + 0.5;
+      setPrice((10 * duration) + 5);
+      console.log("goodbye")
     }
     else if(duration < 0 ){
       duration = Number(startSplit[0]) - Number(endSplit[0])
