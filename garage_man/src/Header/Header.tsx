@@ -66,17 +66,6 @@ const Header=()=>{
                 </Button>
                 <Button
                  
-                  sx={{
-                    fontSize: "18px",
-                    color: "#000000",
-                    marginLeft: "10px"
-                  }}
-                  variant="text"
-                >
-                    <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "#E6E6E6"}} to={'/Settings'}>Settings</Link>
-                </Button>
-                <Button
-                 
                 sx={{
                   fontSize: "18px",
                   color: "#000000",

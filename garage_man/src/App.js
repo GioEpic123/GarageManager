@@ -5,7 +5,6 @@ import PrivateRoutes from "./PrivateRoutes.js";
 import Home from "./pages/Home.tsx";
 import Tickets from "./pages/Tickets.tsx";
 import Vehicles from "./pages/Vehicles.tsx";
-import Settings from "./pages/Settings.tsx";
 import { Route, Routes } from "react-router-dom";
 import React from "react";
 import MainLayout from "./MainLayout.js";
@@ -19,7 +18,6 @@ function App() {
             <Route path="/Home" element={<Home />} />
             <Route path="/Tickets" element={<Tickets />} />
             <Route path="/Vehicles" element={<Vehicles />} />
-            <Route path="/Settings" element={<Settings />} />
           </Route>
         </Route>
         <Route path="/" element={<Login />} />
