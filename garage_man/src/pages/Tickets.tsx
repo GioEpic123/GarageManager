@@ -96,7 +96,8 @@ const Tickets = () => {
               <h1>Active Tickets</h1>
               <table className="activeTable">
                 <tr>
-                  <th>Date</th>
+                  <th>Date Created</th>
+                  <th>Reservation Date</th>
                   <th>Check-In</th>
                   <th>Check-Out</th>
                   <th>Payment</th>
@@ -121,10 +122,12 @@ const Tickets = () => {
                     ).padStart(2, "0")}`;
                     return (
                       <tr key={(key = val.ID)}>
-                        <td>{dateMDY}</td>
-                        <td>{checkInTime}</td>
-                        <td>{checkOutTime}</td>
-                        <td>{String(val.data().price)}</td>
+                         <td>{dateMDY}</td>
+                         <td>{String(val.data().date)}</td>
+                         <td>{checkInTime}</td>
+                         <td>{checkOutTime}</td>
+                         <td>{String(val.data().price)}</td>
+
 
                         <td>
                           <button
@@ -151,7 +154,8 @@ const Tickets = () => {
               <h1>Inactive Tickets</h1>
               <table className="inactiveTable">
                 <tr>
-                  <th>Date</th>
+                  <th>Date Created</th>
+                  <th>Reservation Date</th>
                   <th>Check-In</th>
                   <th>Check-Out</th>
                   <th>Payment</th>
@@ -160,9 +164,11 @@ const Tickets = () => {
                   if (val.data().active == false) {
                     //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
                     //let checkInTime = new Date(val.data().checkIn.seconds * 1000).toLocaleTimeString
-                    //let checkOutTime = new Date(val.data().checkOut.seconds * 1000).toLocaleTimeString
-                    return (
-                      <tr key={(key = val.ID)}>
+                    //let checkOutTime = new Date(val.data().checkOut.seconds * 1000).toLocaleTimeStrings
+                    let dateMDY = new Date(val.data().createdAt.seconds * 1000).toLocaleDateString("en-US")
+                      return (
+                        <tr key={(key = val.ID)}>
+                        <td>{dateMDY}</td>
                         <td>{String(val.data().date)}</td>
                         <td>{String(val.data().startTime)}</td>
                         <td>{String(val.data().endTime)}</td>
