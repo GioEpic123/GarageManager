@@ -10,6 +10,7 @@ import {
   collection,
   addDoc,
   serverTimestamp,
+  Timestamp,
 } from "firebase/firestore";
 import { ContactlessOutlined } from "@mui/icons-material";
 import { calculateBackoffMillis } from "@firebase/util";
@@ -39,14 +40,13 @@ const Home = () => {
 
 function TestSendTicket() {
   const ticketRef = collection(firestore, "tickets");
-
   //Reference our user state to take in form data
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [active, setActive] = useState(true);
   const [date, setDate] = useState("")
   const [duration, setDuration] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(0); 
 
   var uid = localStorage.getItem("id");
 
@@ -139,6 +139,11 @@ function TestSendTicket() {
     //If the hour duration is greater than 0 AND the minute duration is greater than or equal to 0,
     //set the price to $10 * duration time + $5 flat fee
     if(duration > 0 && (Number(endSplit[1]) - Number(startSplit[1])) >= 0){
+      setPrice((10 * duration) + 5)
+      
+    }
+    else if((Number(endSplit[1]) - Number(startSplit[1])) < 0){
+      duration = duration - 1;
       setPrice((10 * duration) + 5)
     }
     else if(duration < 0 ){
