@@ -57,7 +57,7 @@ const Tickets = () => {
         }).ref;
         await updateDoc(reference, {
           active: false,
-          price: 10,
+          price: 5,
         });
 
         setUpdateStatus("noUpdate");
@@ -172,6 +172,7 @@ const Tickets = () => {
                          <td>{String(val.data().date)}</td>
                          <td>{checkInTime}</td>
                          <td>{String(val.data().endTime)}</td>
+                      
                          <td>{String(val.data().price)}</td>
 
 
@@ -180,32 +181,21 @@ const Tickets = () => {
                             onClick={() => {
                               
                                 const confirmBox = window.confirm(
-                                "Are you sure you want to cancel your ticket?"
+                                "If you close you will be charged fully, would you like to proceed?"
                                 );
                                 //FIXME!!!!!!!!!!!!!!!!!
                                 if (confirmBox === true) {
                                   setToUpdate(val.id);
                                   setUpdateStatus("update");
 
-                                  var totalAmountRefund = 10 * (val.data().endTime - val.data().startTime);
+                                  var totalAmountCharged = 10 * val.data().duration + 5;
                                   const confirmBox =window.confirm(
-                                    "The $5 flat fee will not be refunded."
+                                    "Total amount charged  $" + totalAmountCharged 
                                   )
                                   if(confirmBox === true){
                                     console.log("helloooooo")
                                   }
                                 }
-                
-                              
-                              // if(confirmBox === true){
-                              //   var totalAmountRefund = 10 * (val.data().endTime - val.data().startTime);
-                              //   const confirmBox =window.confirm(
-                              //     "Total amount refunded: " + totalAmountRefund
-                              //   )
-                              //   if(confirmBox === true){
-                              //     console.log("helloooooo")
-                              //   }
-                              // }
                             }}
                           >
                             Cancel
@@ -235,7 +225,32 @@ const Tickets = () => {
                         <td>{String(val.data().date)}</td>
                         <td>{String(val.data().startTime)}</td>
                         <td>{String(val.data().endTime)}</td>
+                        
                         <td>{String(val.data().price)}</td>
+                        <td>
+                          <button
+                            onClick={() => {
+                              const confirmBox = window.confirm(
+                                "Are you sure you want to cancel your ticket?"
+                                );
+                                //FIXME!!!!!!!!!!!!!!!!!
+                                if (confirmBox === true) {
+                                  setToUpdate(val.id);
+                                  setUpdateStatus("update");
+
+                                  var totalAmountRefund = 10 * val.data().duration;
+                                  const confirmBox =window.confirm(
+                                    "Total amount refunded  $" + totalAmountRefund + ". The reservation fee of $5 will not be refunded."
+                                  )
+                                  if(confirmBox === true){
+                                    console.log("helloooooo")
+                                  }
+                                }
+                            }}
+                          >
+                            Cancel
+                          </button> 
+                        </td>
                       </tr>
                     );
                   }else if(val.data().active == false && val.data().isReservation == false){
@@ -303,8 +318,10 @@ const Tickets = () => {
                         <td>{dateMDY}</td>
                         <td>{String(val.data().date)}</td>
                         <td>{checkInTime}</td>
-                        <td>{checkOutTime}</td>
+                        <td> -- </td>
                         <td>{String(val.data().price)}</td>
+    
+                        
                       </tr>
                     );
                   }
