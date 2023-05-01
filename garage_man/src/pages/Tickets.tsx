@@ -189,7 +189,7 @@ const Tickets = () => {
 
                                   var totalAmountRefund = 10 * (val.data().endTime - val.data().startTime);
                                   const confirmBox =window.confirm(
-                                    'Total amount refunded:' + totalAmountRefund
+                                    "The $5 flat fee will not be refunded."
                                   )
                                   if(confirmBox === true){
                                     console.log("helloooooo")
