@@ -137,6 +137,15 @@ const Tickets = () => {
                                 setToUpdate(val.id);
                                 setUpdateStatus("update");
                               }
+                              if(confirmBox === true){
+                                var totalAmountRefund = 10 * (val.data().endTime - val.data().startTime);
+                                const confirmBox =window.confirm(
+                                  "Total amount refunded: " + totalAmountRefund
+                                )
+                                if(confirmBox === true){
+                                  console.log("helloooooo")
+                                }
+                              }
                             }}
                           >
                             Cancel
