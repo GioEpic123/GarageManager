@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import {Link} from 'react-router-dom';
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import { useState } from 'react';
 
 const app = initializeApp({
   apiKey: "AIzaSyDSuLNYYqcUF8xpXHxI6Ijz8tILwshovZI",
@@ -20,6 +21,7 @@ const app = initializeApp({
 const auth = getAuth(app);
 
 const Header=()=>{
+  const [imageSrc, setImageSrc] = useState(localStorage.getItem("pic"))
   return(
     <Box sx={{ display: 'flex-end' }}>
         <CssBaseline />
@@ -77,6 +79,11 @@ const Header=()=>{
                   <Link style={{fontFamily: "Poppins",textDecoration: "none", color: "#E6E6E6"}} to={'/'}>Sign Out</Link>
               </Button>
               </Box>
+              <div>
+                <img src={localStorage.getItem("pic")}   
+                  style={{marginLeft: "5px", width: 50, height: 50, borderRadius: 400/ 2}} 
+                />
+              </div>
           </Toolbar>
         </AppBar>
       </Box>
