@@ -57,7 +57,7 @@ const Tickets = () => {
         }).ref;
         await updateDoc(reference, {
           active: false,
-          price: 5,
+          price: 10,
         });
 
         setUpdateStatus("noUpdate");
@@ -169,23 +169,38 @@ const Tickets = () => {
                         <td>
                           <button
                             onClick={() => {
-                              const confirmBox = window.confirm(
+                              if(val.data().isReservation == true){
+                                const confirmBox = window.confirm(
                                 "Are you sure you want to cancel your ticket?"
-                              );
-                              //FIXME!!!!!!!!!!!!!!!!!
-                              if (confirmBox === true) {
-                                setToUpdate(val.id);
-                                setUpdateStatus("update");
-                              }
-                              if(confirmBox === true){
-                                var totalAmountRefund = 10 * (val.data().endTime - val.data().startTime);
-                                const confirmBox =window.confirm(
-                                  "Total amount refunded: " + totalAmountRefund
-                                )
-                                if(confirmBox === true){
-                                  console.log("helloooooo")
+                                );
+                                //FIXME!!!!!!!!!!!!!!!!!
+                                if (confirmBox === true) {
+                                  setToUpdate(val.id);
+                                  setUpdateStatus("update");
+
+                                  var totalAmountRefund = 10 * (val.data().endTime - val.data().startTime);
+                                  const confirmBox =window.confirm(
+                                    'Total amount refunded:  ${totalAmountRefund}'
+                                  )
+                                  if(confirmBox === true){
+                                    console.log("helloooooo")
+                                  }
                                 }
+                              }else{
+                                const confirmBox = window.confirm(
+                                  "You can not cancel this ticket as it is currently active!"
+                                  );
                               }
+                              
+                              // if(confirmBox === true){
+                              //   var totalAmountRefund = 10 * (val.data().endTime - val.data().startTime);
+                              //   const confirmBox =window.confirm(
+                              //     "Total amount refunded: " + totalAmountRefund
+                              //   )
+                              //   if(confirmBox === true){
+                              //     console.log("helloooooo")
+                              //   }
+                              // }
                             }}
                           >
                             Cancel
