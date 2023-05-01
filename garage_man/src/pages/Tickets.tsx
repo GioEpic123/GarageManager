@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useDebugValue } from "react";
 import { app } from "./Login";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 import {
   getFirestore,
@@ -36,12 +36,61 @@ const Tickets = () => {
         setSnapshot(querySnapshot);
         setLoadState("done");
         console.log(querySnapshot);
+
+        // Now that we have our tickets, lets update their active status based on time
+        querySnapshot.docs.map((val, key) => {
+          const currTime = serverTimestamp();
+          // Check time differently dependant on whether or not it's a reservation
+          if (val.data().isReservation == true) {
+            // We have reservation, 24-hr format
+            const start = val.data().startTime;
+            const end = val.data().endTime;
+
+            // TO-DO: !!!!Transfer our time to 24hr format
+
+            if (start < currTime && end > currTime) {
+              // We know our ticket should currently be active
+              setActiveID(val.id);
+              setActiveFlag(true);
+              setActiveStatus(true);
+            } else {
+              //Set inactive
+              setActiveID(val.id);
+              setActiveFlag(true);
+              setActiveStatus(false);
+            }
+          } else {
+            //TICKETS
+          }
+        });
       })
       .catch((err) => {
         setLoadState("Error");
         setError(err);
       });
   }, [toUpdate, updateStatus]);
+
+  const [activeID, setActiveID] = useState("");
+  const [activeFlag, setActiveFlag] = useState(false);
+  const [activeStatus, setActiveStatus] = useState(false);
+  useEffect(() => {
+    if (activeFlag) {
+      // We have a ticket who's time is now, so we need to set it to active
+      const updateActive = async () => {
+        var reference = snapshot.docs.find((doc) => {
+          return doc.id === activeID;
+        }).ref;
+        await updateDoc(reference, {
+          active: activeStatus,
+        });
+
+        setActiveFlag(false);
+      };
+      updateActive().catch(console.error);
+      setActiveFlag(false);
+      setActiveStatus(false);
+    }
+  }, [activeFlag]);
 
   //creating useEffect for updating active status
   useEffect(() => {
@@ -105,66 +154,106 @@ const Tickets = () => {
 
                 {snapshot.docs.map((val, key) => {
                   if (val.data().active == true) {
-                    var checkInTime = ""
-                    var checkOutTime = ""
+                    var checkInTime = "";
+                    var checkOutTime = "";
                     let dateMDY = new Date(
                       val.data().createdAt.seconds * 1000
                     ).toLocaleDateString("en-US");
 
-                    if(new Date(val.data().startTime.seconds * 1000).getHours() < 12 || 
-                      new Date(val.data().startTime.seconds * 1000).getHours() == 24){
+                    if (
+                      new Date(val.data().startTime.seconds * 1000).getHours() <
+                        12 ||
+                      new Date(
+                        val.data().startTime.seconds * 1000
+                      ).getHours() == 24
+                    ) {
                       checkInTime = `${new Date(
                         val.data().startTime.seconds * 1000
                       ).getHours()}:${String(
-                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getMinutes()
                       ).padStart(2, "0")} AM`;
-                    }
-                    else{
-                      checkInTime = `${new Date(
-                        val.data().startTime.seconds * 1000
-                      ).getHours() - 12}:${String(
-                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                    } else {
+                      checkInTime = `${
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12
+                      }:${String(
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getMinutes()
                       ).padStart(2, "0")} PM`;
                     }
-                    
-                    if(new Date(val.data().startTime.seconds * 1000).getHours()+1 < 12 || 
-                      new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
-                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
-                        checkOutTime = `${12}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
-                        ).padStart(2, "0")} AM`;
-                      }
-                      else{
-                        checkOutTime = `${new Date(
+
+                    if (
+                      new Date(val.data().startTime.seconds * 1000).getHours() +
+                        1 <
+                        12 ||
+                      new Date(val.data().startTime.seconds * 1000).getHours() +
+                        1 ==
+                        24
+                    ) {
+                      if (
+                        new Date(
                           val.data().startTime.seconds * 1000
-                        ).getHours() - 12 + 1}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).getHours() +
+                          1 ==
+                        24
+                      ) {
+                        checkOutTime = `${12}:${String(
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
+                        ).padStart(2, "0")} AM`;
+                      } else {
+                        checkOutTime = `${
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getHours() -
+                          12 +
+                          1
+                        }:${String(
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
                         ).padStart(2, "0")} AM`;
                       }
-                    }
-                    else{
-                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                    } else {
+                      if (
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() +
+                          1 ==
+                        24
+                      ) {
                         checkOutTime = `${12}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
                         ).padStart(2, "0")} PM`;
-                      }
-                      else{
-                        checkOutTime = `${new Date(
-                          val.data().startTime.seconds * 1000
-                        ).getHours() - 12 + 1}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                      } else {
+                        checkOutTime = `${
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getHours() -
+                          12 +
+                          1
+                        }:${String(
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
                         ).padStart(2, "0")} PM`;
                       }
                     }
 
                     return (
                       <tr key={(key = val.ID)}>
-                         <td>{dateMDY}</td>
-                         <td>{String(val.data().date)}</td>
-                         <td>{checkInTime}</td>
-                         <td>{String(val.data().endTime)}</td>
-                         <td>{String(val.data().price)}</td>
-
+                        <td>{dateMDY}</td>
+                        <td>{String(val.data().date)}</td>
+                        <td>{checkInTime}</td>
+                        <td>{String(val.data().endTime)}</td>
+                        <td>{String(val.data().price)}</td>
 
                         <td>
                           <button
@@ -198,10 +287,15 @@ const Tickets = () => {
                   <th>Payment</th>
                 </tr>
                 {snapshot.docs.map((val, key) => {
-                  if (val.data().active == false && val.data().isReservation == true) {
-                    let dateMDY = new Date(val.data().createdAt.seconds * 1000).toLocaleDateString("en-US")
-                      return (
-                        <tr key={(key = val.ID)}>
+                  if (
+                    val.data().active == false &&
+                    val.data().isReservation == true
+                  ) {
+                    let dateMDY = new Date(
+                      val.data().createdAt.seconds * 1000
+                    ).toLocaleDateString("en-US");
+                    return (
+                      <tr key={(key = val.ID)}>
                         <td>{dateMDY}</td>
                         <td>{String(val.data().date)}</td>
                         <td>{String(val.data().startTime)}</td>
@@ -209,60 +303,104 @@ const Tickets = () => {
                         <td>{String(val.data().price)}</td>
                       </tr>
                     );
-                  }else if(val.data().active == false && val.data().isReservation == false){
-                    var checkInTime = ""
-                    var checkOutTime = ""
+                  } else if (
+                    val.data().active == false &&
+                    val.data().isReservation == false
+                  ) {
+                    var checkInTime = "";
+                    var checkOutTime = "";
                     let dateMDY = new Date(
                       val.data().createdAt.seconds * 1000
                     ).toLocaleDateString("en-US");
 
-                    if(new Date(val.data().startTime.seconds * 1000).getHours() < 12 || 
-                      new Date(val.data().startTime.seconds * 1000).getHours() == 24){
+                    if (
+                      new Date(val.data().startTime.seconds * 1000).getHours() <
+                        12 ||
+                      new Date(
+                        val.data().startTime.seconds * 1000
+                      ).getHours() == 24
+                    ) {
                       checkInTime = `${new Date(
                         val.data().startTime.seconds * 1000
                       ).getHours()}:${String(
-                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getMinutes()
                       ).padStart(2, "0")} AM`;
-                    }
-                    else{
-                      checkInTime = `${new Date(
-                        val.data().startTime.seconds * 1000
-                      ).getHours() - 12}:${String(
-                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                    } else {
+                      checkInTime = `${
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12
+                      }:${String(
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getMinutes()
                       ).padStart(2, "0")} PM`;
                     }
-                    
-                    if(new Date(val.data().startTime.seconds * 1000).getHours()+1 < 12 || 
-                      new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
-                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+
+                    if (
+                      new Date(val.data().startTime.seconds * 1000).getHours() +
+                        1 <
+                        12 ||
+                      new Date(val.data().startTime.seconds * 1000).getHours() +
+                        1 ==
+                        24
+                    ) {
+                      if (
+                        new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() +
+                          1 ==
+                        24
+                      ) {
                         checkOutTime = `${12}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
+                        ).padStart(2, "0")} AM`;
+                      } else {
+                        checkOutTime = `${
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getHours() -
+                          12 +
+                          1
+                        }:${String(
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
                         ).padStart(2, "0")} AM`;
                       }
-                      else{
-                        checkOutTime = `${new Date(
+                    } else {
+                      if (
+                        new Date(
                           val.data().startTime.seconds * 1000
-                        ).getHours() - 12 + 1}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
-                        ).padStart(2, "0")} AM`;
-                      }
-                    }
-                    else{
-                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                        ).getHours() +
+                          1 ==
+                        24
+                      ) {
                         checkOutTime = `${12}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
                         ).padStart(2, "0")} PM`;
-                      }
-                      else{
-                        checkOutTime = `${new Date(
-                          val.data().startTime.seconds * 1000
-                        ).getHours() - 12 + 1}:${String(
-                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                      } else {
+                        checkOutTime = `${
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getHours() -
+                          12 +
+                          1
+                        }:${String(
+                          new Date(
+                            val.data().startTime.seconds * 1000
+                          ).getMinutes()
                         ).padStart(2, "0")} PM`;
                       }
                     }
-                      return (
-                        <tr key={(key = val.ID)}>
+                    return (
+                      <tr key={(key = val.ID)}>
                         <td>{dateMDY}</td>
                         <td>{String(val.data().date)}</td>
                         <td>{checkInTime}</td>
