@@ -96,7 +96,8 @@ const Tickets = () => {
               <h1>Active Tickets</h1>
               <table className="activeTable">
                 <tr>
-                  <th>Date</th>
+                  <th>Date Created</th>
+                  <th>Reservation Date</th>
                   <th>Check-In</th>
                   <th>Check-Out</th>
                   <th>Payment</th>
@@ -105,26 +106,66 @@ const Tickets = () => {
 
                 {snapshot.docs.map((val, key) => {
                   if (val.data().active == true) {
+                    var checkInTime = ""
+                    var checkOutTime = ""
                     let dateMDY = new Date(
                       val.data().createdAt.seconds * 1000
                     ).toLocaleDateString("en-US");
-                    let checkInTime = `${new Date(
-                      val.data().startTime.seconds * 1000
-                    ).getHours()}:${String(
-                      new Date(val.data().startTime.seconds * 1000).getMinutes()
-                    ).padStart(2, "0")}`;
-                    let checkOutTime = `${
-                      new Date(val.data().startTime.seconds * 1000).getHours() +
-                      1
-                    }:${String(
-                      new Date(val.data().startTime.seconds * 1000).getMinutes()
-                    ).padStart(2, "0")}`;
+
+                    if(new Date(val.data().startTime.seconds * 1000).getHours() < 12 || 
+                      new Date(val.data().startTime.seconds * 1000).getHours() == 24){
+                      checkInTime = `${new Date(
+                        val.data().startTime.seconds * 1000
+                      ).getHours()}:${String(
+                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                      ).padStart(2, "0")} AM`;
+                    }
+                    else{
+                      checkInTime = `${new Date(
+                        val.data().startTime.seconds * 1000
+                      ).getHours() - 12}:${String(
+                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                      ).padStart(2, "0")} PM`;
+                    }
+                    
+                    if(new Date(val.data().startTime.seconds * 1000).getHours()+1 < 12 || 
+                      new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                        checkOutTime = `${12}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} AM`;
+                      }
+                      else{
+                        checkOutTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12 + 1}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} AM`;
+                      }
+                    }
+                    else{
+                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                        checkOutTime = `${12}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
+                      else{
+                        checkOutTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12 + 1}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
+                    }
+
                     return (
                       <tr key={(key = val.ID)}>
-                        <td>{dateMDY}</td>
-                        <td>{checkInTime}</td>
-                        <td>{checkOutTime}</td>
-                        <td>{String(val.data().price)}</td>
+                         <td>{dateMDY}</td>
+                         <td>{String(val.data().date)}</td>
+                         <td>{checkInTime}</td>
+                         <td>{checkOutTime}</td>
+                         <td>{String(val.data().price)}</td>
+
 
                         <td>
                           <button
@@ -160,21 +201,82 @@ const Tickets = () => {
               <h1>Inactive Tickets</h1>
               <table className="inactiveTable">
                 <tr>
-                  <th>Date</th>
+                  <th>Date Created</th>
+                  <th>Reservation Date</th>
                   <th>Check-In</th>
                   <th>Check-Out</th>
                   <th>Payment</th>
                 </tr>
                 {snapshot.docs.map((val, key) => {
-                  if (val.data().active == false) {
-                    //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
-                    //let checkInTime = new Date(val.data().checkIn.seconds * 1000).toLocaleTimeString
-                    //let checkOutTime = new Date(val.data().checkOut.seconds * 1000).toLocaleTimeString
-                    return (
-                      <tr key={(key = val.ID)}>
+                  if (val.data().active == false && val.data().isReservation == true) {
+                    let dateMDY = new Date(val.data().createdAt.seconds * 1000).toLocaleDateString("en-US")
+                      return (
+                        <tr key={(key = val.ID)}>
+                        <td>{dateMDY}</td>
                         <td>{String(val.data().date)}</td>
                         <td>{String(val.data().startTime)}</td>
                         <td>{String(val.data().endTime)}</td>
+                        <td>{String(val.data().price)}</td>
+                      </tr>
+                    );
+                  }else if(val.data().active == false && val.data().isReservation == false){
+                    var checkInTime = ""
+                    var checkOutTime = ""
+                    let dateMDY = new Date(
+                      val.data().createdAt.seconds * 1000
+                    ).toLocaleDateString("en-US");
+
+                    if(new Date(val.data().startTime.seconds * 1000).getHours() < 12 || 
+                      new Date(val.data().startTime.seconds * 1000).getHours() == 24){
+                      checkInTime = `${new Date(
+                        val.data().startTime.seconds * 1000
+                      ).getHours()}:${String(
+                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                      ).padStart(2, "0")} AM`;
+                    }
+                    else{
+                      checkInTime = `${new Date(
+                        val.data().startTime.seconds * 1000
+                      ).getHours() - 12}:${String(
+                        new Date(val.data().startTime.seconds * 1000).getMinutes()
+                      ).padStart(2, "0")} PM`;
+                    }
+                    
+                    if(new Date(val.data().startTime.seconds * 1000).getHours()+1 < 12 || 
+                      new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                        checkOutTime = `${12}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} AM`;
+                      }
+                      else{
+                        checkOutTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12 + 1}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} AM`;
+                      }
+                    }
+                    else{
+                      if(new Date(val.data().startTime.seconds * 1000).getHours()+1 == 24){
+                        checkOutTime = `${12}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
+                      else{
+                        checkOutTime = `${new Date(
+                          val.data().startTime.seconds * 1000
+                        ).getHours() - 12 + 1}:${String(
+                          new Date(val.data().startTime.seconds * 1000).getMinutes()
+                        ).padStart(2, "0")} PM`;
+                      }
+                    }
+                      return (
+                        <tr key={(key = val.ID)}>
+                        <td>{dateMDY}</td>
+                        <td>{String(val.data().date)}</td>
+                        <td>{checkInTime}</td>
+                        <td>{checkOutTime}</td>
                         <td>{String(val.data().price)}</td>
                       </tr>
                     );

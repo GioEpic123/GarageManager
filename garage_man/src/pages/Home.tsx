@@ -44,12 +44,12 @@ function TestSendTicket() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [active, setActive] = useState(true);
-  const [date, setDate] = useState("")
+  const [date, setDate] = useState("N/A")
   const [duration, setDuration] = useState("");
   const [price, setPrice] = useState(0); 
 
   var uid = localStorage.getItem("id");
-
+  const [isReservation, setIsReservation] = useState(false); //tells weather a ticket is a reservation or not
   const [show, setShow] = useState(false);
   const [showReservation, setShowReservation] = useState(false);
   const [reservationStat, setReservationStat] = useState("No Reservation")
@@ -65,6 +65,7 @@ function TestSendTicket() {
         active: active,
         duration: duration,
         price: price,
+        isReservation: isReservation,
         ID: uid,
       }).then(() => {}).catch((err) =>{});
   
@@ -75,6 +76,7 @@ function TestSendTicket() {
       //setDuration("");
       setPrice(0);
       setReservationStat("No Reservation")
+      setIsReservation(false)
     }
     
   }, [reservationStat]);
@@ -90,8 +92,10 @@ function TestSendTicket() {
       createdAt: serverTimestamp(),
       startTime: serverTimestamp(),
       active: active,
+      date: date,
       duration: duration,
       price: price,
+      isReservation: isReservation,
       ID: uid,
     });
 
@@ -100,32 +104,9 @@ function TestSendTicket() {
     //setActive(false);
     setDuration("");
     setPrice(0);
-  };
-  //publishes reservation data
-  /*const saveReservationtData = async (e) => {
-    // Prevent the page from refreshing when the form is submitted
-    e.preventDefault();
-    //setDuration(calculateDuaration())
-  
-    // Create a doc on the "tickets" collection
-    await addDoc(ticketRef, {
-      createdAt: serverTimestamp(),
-      startTime: startTime,
-      endTime: endTime,
-      active: active,
-      duration: duration,
-      price: price,
-      ID: uid,
-    });
-
-    // Once we're done adding, set all values to nothing
-    setStartTime("");
-    //setActive(false);
-    setEndTime("");
-    //setDuration("");
-    setPrice("");
+    setDate("");
     
-  };*/
+  };
   const handleConfirm = (e) => {
     //e.preventDefault();
     saveTicketData(e);
@@ -156,6 +137,7 @@ function TestSendTicket() {
     //setPrice((10 * duration) + 5);
     //saveReservationtData(e);
     setActive(false)
+    setIsReservation(true);
     setReservationStat("reservation")
   }
   
