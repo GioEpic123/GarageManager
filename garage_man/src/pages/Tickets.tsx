@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useDebugValue } from "react";
 import { app } from "./Login";
-import {doc, updateDoc} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
 import {
   getFirestore,
@@ -14,23 +14,6 @@ import { Help } from "@material-ui/icons";
 //const auth = getAuth(app);
 const firestore = getFirestore(app);
 
-// const ticketRef = collection(firestore, "tickets");
-
-//constructor for ticket data type, probably not needed anymore
-export class TicketInfo {
-  constructor(
-    public date: Date = new Date(),
-    public checkIn: Date = new Date(),
-    public checkOut: Date = new Date(),
-    public active: boolean,
-    public price: Number
-  ) {}
-}
-//create ticket type that has date(Date), startTime(time), duration(int), active(bool), and price(double)
-
-//array that holds the tickets, probably not needed anymore
-const ticketData: TicketInfo[] = [];
-
 const Tickets = () => {
   const [loadState, setLoadState] = useState("loading");
   const [snapshot, setSnapshot] = useState({});
@@ -38,7 +21,6 @@ const Tickets = () => {
   //Creating a variable to track the update status and we want to store that in a hook somewhere
   const [updateStatus, setUpdateStatus] = useState("noUpdate");
   const [toUpdate, setToUpdate] = useState(0);
-  
 
   // useEffect - gets called on page first render (since dependancies are empty)
   useEffect(() => {
@@ -63,24 +45,25 @@ const Tickets = () => {
 
   //creating useEffect for updating active status
   useEffect(() => {
-    if(updateStatus === "update"){
+    if (updateStatus === "update") {
       // Make your API Call here
       const update = async () => {
         //console.log(toUpdate);
-        //looking for the doc reference according to the id we had set as toUpdate 
+        //looking for the doc reference according to the id we had set as toUpdate
         //needed to do a ref instead of the snapshot
-        //issue; updating but does not rerender when it does update 
-        var reference = snapshot.docs.find(doc => {return doc.id === toUpdate}).ref;
+        //issue; updating but does not rerender when it does update
+        var reference = snapshot.docs.find((doc) => {
+          return doc.id === toUpdate;
+        }).ref;
         console.log(reference);
         await updateDoc(reference, {
-          active: "no",
+          active: false,
           price: 5,
         });
 
-        setUpdateStatus("noUpdate")
-      }
+        setUpdateStatus("noUpdate");
+      };
       update().catch(console.error);
-      
     }
   }, [snapshot.docs, toUpdate, updateStatus]);
 
@@ -119,37 +102,50 @@ const Tickets = () => {
                   <th>Payment</th>
                   <th>Cancel Ticket</th>
                 </tr>
-                
+
                 {snapshot.docs.map((val, key) => {
-                  if (val.data().active === "yes") {
-                  //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
-                  //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
-                  //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
-                  return (
-                    <tr key={(key = val.ID)}>
-                      <td>{String(val.data().createdAt)}</td>
-                      <td>{String(val.data().startTime)}</td>
-                      <td>{String(val.data().endTime)}</td>
-                      <td>{String(val.data().price)}</td>
-                      <td>{String(val.data().active)}</td>
-                      
-                      <td><button
-                      onClick={() => {
-                        const confirmBox =window.confirm(
-                          "Are you sure you want to cancel your ticket?"
-                        )
-                        //FIXME!!!!!!!!!!!!!!!!!
-                        if(confirmBox === true){
-                          setToUpdate(val.id);
-                          setUpdateStatus("update");
-                        }
-                      }}>
-                      Cancel
-                      </button></td>
-                    </tr>
-                  );
+                  if (val.data().active == true) {
+                    let dateMDY = new Date(
+                      val.data().createdAt.seconds * 1000
+                    ).toLocaleDateString("en-US");
+                    let checkInTime = `${new Date(
+                      val.data().startTime.seconds * 1000
+                    ).getHours()}:${String(
+                      new Date(val.data().startTime.seconds * 1000).getMinutes()
+                    ).padStart(2, "0")}`;
+                    let checkOutTime = `${
+                      new Date(val.data().startTime.seconds * 1000).getHours() +
+                      1
+                    }:${String(
+                      new Date(val.data().startTime.seconds * 1000).getMinutes()
+                    ).padStart(2, "0")}`;
+                    return (
+                      <tr key={(key = val.ID)}>
+                        <td>{dateMDY}</td>
+                        <td>{checkInTime}</td>
+                        <td>{checkOutTime}</td>
+                        <td>{String(val.data().price)}</td>
+
+                        <td>
+                          <button
+                            onClick={() => {
+                              const confirmBox = window.confirm(
+                                "Are you sure you want to cancel your ticket?"
+                              );
+                              //FIXME!!!!!!!!!!!!!!!!!
+                              if (confirmBox === true) {
+                                setToUpdate(val.id);
+                                setUpdateStatus("update");
+                              }
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </td>
+                      </tr>
+                    );
                   }
-                })}  
+                })}
               </table>
 
               <h1>Inactive Tickets</h1>
@@ -161,19 +157,18 @@ const Tickets = () => {
                   <th>Payment</th>
                 </tr>
                 {snapshot.docs.map((val, key) => {
-                  if (val.data().active === "no") {
-                  //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
-                  //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
-                  //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
-                  return (
-                    <tr key={(key = val.ID)}>
-                      <td>{String(val.data().createdAt)}</td>
-                      <td>{String(val.data().startTime)}</td>
-                      <td>{String(val.data().endtime)}</td>
-                      <td>{String(val.data().price)}</td>
-                      <td>{String(val.data().active)}</td>
-                    </tr>
-                  );
+                  if (val.data().active == false) {
+                    //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
+                    //let checkInTime = new Date(val.data().checkIn.seconds * 1000).toLocaleTimeString
+                    //let checkOutTime = new Date(val.data().checkOut.seconds * 1000).toLocaleTimeString
+                    return (
+                      <tr key={(key = val.ID)}>
+                        <td>{String(val.data().date)}</td>
+                        <td>{String(val.data().startTime)}</td>
+                        <td>{String(val.data().endTime)}</td>
+                        <td>{String(val.data().price)}</td>
+                      </tr>
+                    );
                   }
                 })}
               </table>
@@ -189,4 +184,3 @@ export default Tickets;
 function setData(arg0: any) {
   throw new Error("Function not implemented.");
 }
-
