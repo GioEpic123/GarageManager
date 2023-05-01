@@ -124,11 +124,15 @@ function TestSendTicket() {
       
     }
     else if((Number(endSplit[1]) - Number(startSplit[1])) < 0){
-      duration = duration - 1;
+      if((Number(endSplit[1]) - Number(startSplit[1]))){
+        duration = duration + 0.5
+      }
+      else{
+        duration = duration - 0.5
+      }
       setPrice((10 * duration) + 5)
     }
     else if(duration < 0 ){
-      console.log(duration);
       duration = Number(startSplit[0]) - Number(endSplit[0])
       setPrice((10 * duration) + 5)
     }
