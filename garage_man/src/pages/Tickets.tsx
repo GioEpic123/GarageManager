@@ -12,21 +12,6 @@ import {
 //const auth = getAuth(app);
 const firestore = getFirestore(app);
 
-//constructor for ticket data type, probably not needed anymore
-export class TicketInfo {
-  constructor(
-    public date: Date = new Date(),
-    public checkIn: Date = new Date(),
-    public checkOut: Date = new Date(),
-    public active: boolean,
-    public price: Number
-  ) {}
-}
-//create ticket type that has date(Date), startTime(time), duration(int), active(bool), and price(double)
-
-//array that holds the tickets, probably not needed anymore
-const ticketData: TicketInfo[] = [];
-
 const Tickets = () => {
   const [loadState, setLoadState] = useState("loading");
   const [snapshot, setSnapshot] = useState({});
@@ -87,20 +72,22 @@ const Tickets = () => {
                   <th>Payment</th>
                 </tr>
                 {snapshot.docs.map((val, key) => {
-                  //if (val.data().active == true) {
-                  //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
-                  //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
-                  //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
-                  return (
-                    <tr key={(key = val.ID)}>
-                      <td>{String(val.data().createdAt)}</td>
-                      <td>{String(val.data().startTime)}</td>
-                      <td>{String(val.data().endTime)}</td>
+                  if (val.data().active == true) {
+                    let dateMDY = new Date(val.data().createdAt.seconds * 1000).toLocaleDateString("en-US")
+                    let checkInTime = `${new Date(val.data().startTime.seconds * 1000).getHours()}:${
+                      String(new Date(val.data().startTime.seconds * 1000).getMinutes()).padStart(2, '0')}`
+                    let checkOutTime = `${new Date(val.data().startTime.seconds * 1000).getHours()+1}:${
+                      String(new Date(val.data().startTime.seconds * 1000).getMinutes()).padStart(2, '0')}`
+                    return (
+                      <tr key={(key = val.ID)}>
+                      <td>{dateMDY}</td>
+                      <td>{checkInTime}</td>
+                      <td>{checkOutTime}</td>
                       <td>{String(val.data().price)}</td>
                       <td><button>Delete</button></td>
                     </tr>
                   );
-                  //}
+                  }
                 })}
               </table>
               <h1>Inactive Tickets</h1>
@@ -112,21 +99,21 @@ const Tickets = () => {
                   <th>Payment</th>
                 </tr>
                 {snapshot.docs.map((val, key) => {
-                  //if (val.data().active == false) {
-                  //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
-                  //let checkInTime = `${val.checkIn.getHours()}:${String(val.checkIn.getMinutes()).padStart(2, '0')}`;
-                  //let checkOutTime = `${val.checkOut.getHours()}:${String(val.checkOut.getMinutes()).padStart(2, '0')}`;
-                  return (
-                    <tr key={(key = val.ID)}>
-                      <td>{String(val.data().createdAt)}</td>
-                      <td>{String(val.data().startTime)}</td>
-                      <td>{String(val.data().endtime)}</td>
-                      <td>{String(val.data().price)}</td>
-                      <td><button>Delete</button></td>
-                    </tr>
-                  );
-                  //}
-                })}
+                  if (val.data().active == false) {
+                    //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
+                    //let checkInTime = new Date(val.data().checkIn.seconds * 1000).toLocaleTimeString
+                    //let checkOutTime = new Date(val.data().checkOut.seconds * 1000).toLocaleTimeString
+                      return (
+                        <tr key={(key = val.ID)}>
+                        <td>{String(val.data().date)}</td>
+                        <td>{String(val.data().startTime)}</td>
+                        <td>{String(val.data().endTime)}</td>
+                        <td>{String(val.data().price)}</td>
+                        <td><button>Delete</button></td>
+                      </tr>
+                    );
+                    }
+                  })}
               </table>
             </text>
           )}
