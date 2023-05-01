@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useDebugValue } from "react";
 import { app } from "./Login";
-import {doc, updateDoc} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
 import {
   getFirestore,
@@ -21,7 +21,6 @@ const Tickets = () => {
   //Creating a variable to track the update status and we want to store that in a hook somewhere
   const [updateStatus, setUpdateStatus] = useState("noUpdate");
   const [toUpdate, setToUpdate] = useState(0);
-  
 
   // useEffect - gets called on page first render (since dependancies are empty)
   useEffect(() => {
@@ -46,24 +45,25 @@ const Tickets = () => {
 
   //creating useEffect for updating active status
   useEffect(() => {
-    if(updateStatus === "update"){
+    if (updateStatus === "update") {
       // Make your API Call here
       const update = async () => {
         //console.log(toUpdate);
-        //looking for the doc reference according to the id we had set as toUpdate 
+        //looking for the doc reference according to the id we had set as toUpdate
         //needed to do a ref instead of the snapshot
-        //issue; updating but does not rerender when it does update 
-        var reference = snapshot.docs.find(doc => {return doc.id === toUpdate}).ref;
+        //issue; updating but does not rerender when it does update
+        var reference = snapshot.docs.find((doc) => {
+          return doc.id === toUpdate;
+        }).ref;
         console.log(reference);
         await updateDoc(reference, {
           active: false,
           price: 5,
         });
 
-        setUpdateStatus("noUpdate")
-      }
+        setUpdateStatus("noUpdate");
+      };
       update().catch(console.error);
-      
     }
   }, [snapshot.docs, toUpdate, updateStatus]);
 
@@ -102,37 +102,48 @@ const Tickets = () => {
                   <th>Payment</th>
                   <th>Cancel Ticket</th>
                 </tr>
-                
+
                 {snapshot.docs.map((val, key) => {
                   if (val.data().active == true) {
-                    let dateMDY = new Date(val.data().createdAt.seconds * 1000).toLocaleDateString("en-US")
-                    let checkInTime = `${new Date(val.data().startTime.seconds * 1000).getHours()}:${
-                      String(new Date(val.data().startTime.seconds * 1000).getMinutes()).padStart(2, '0')}`
-                    let checkOutTime = `${new Date(val.data().startTime.seconds * 1000).getHours()+1}:${
-                      String(new Date(val.data().startTime.seconds * 1000).getMinutes()).padStart(2, '0')}`
+                    let dateMDY = new Date(
+                      val.data().createdAt.seconds * 1000
+                    ).toLocaleDateString("en-US");
+                    let checkInTime = `${new Date(
+                      val.data().startTime.seconds * 1000
+                    ).getHours()}:${String(
+                      new Date(val.data().startTime.seconds * 1000).getMinutes()
+                    ).padStart(2, "0")}`;
+                    let checkOutTime = `${
+                      new Date(val.data().startTime.seconds * 1000).getHours() +
+                      1
+                    }:${String(
+                      new Date(val.data().startTime.seconds * 1000).getMinutes()
+                    ).padStart(2, "0")}`;
                     return (
                       <tr key={(key = val.ID)}>
-                      <td>{dateMDY}</td>
-                      <td>{checkInTime}</td>
-                      <td>{checkOutTime}</td>
-                      <td>{String(val.data().price)}</td>
-                      
-                      <td><button
-                      onClick={() => {
-                        const confirmBox =window.confirm(
-                          "Are you sure you want to cancel your ticket?"
-                        )
-                        //FIXME!!!!!!!!!!!!!!!!!
-                        if(confirmBox === true){
-                          setToUpdate(val.id);
-                          setUpdateStatus("update");
-                        }
-                      }}>
-                      Cancel
-                      </button></td>
-                      
-                    </tr>
-                  );
+                        <td>{dateMDY}</td>
+                        <td>{checkInTime}</td>
+                        <td>{checkOutTime}</td>
+                        <td>{String(val.data().price)}</td>
+
+                        <td>
+                          <button
+                            onClick={() => {
+                              const confirmBox = window.confirm(
+                                "Are you sure you want to cancel your ticket?"
+                              );
+                              //FIXME!!!!!!!!!!!!!!!!!
+                              if (confirmBox === true) {
+                                setToUpdate(val.id);
+                                setUpdateStatus("update");
+                              }
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </td>
+                      </tr>
+                    );
                   }
                 })}
               </table>
@@ -150,17 +161,16 @@ const Tickets = () => {
                     //let dateMDY = `${val.date.getMonth() + 1}/${val.date.getDate()}/${val.date.getFullYear()}`;
                     //let checkInTime = new Date(val.data().checkIn.seconds * 1000).toLocaleTimeString
                     //let checkOutTime = new Date(val.data().checkOut.seconds * 1000).toLocaleTimeString
-                      return (
-                        <tr key={(key = val.ID)}>
+                    return (
+                      <tr key={(key = val.ID)}>
                         <td>{String(val.data().date)}</td>
                         <td>{String(val.data().startTime)}</td>
                         <td>{String(val.data().endTime)}</td>
                         <td>{String(val.data().price)}</td>
-                        <td><button>Delete</button></td>
                       </tr>
                     );
-                    }
-                  })}
+                  }
+                })}
               </table>
             </text>
           )}
@@ -174,4 +184,3 @@ export default Tickets;
 function setData(arg0: any) {
   throw new Error("Function not implemented.");
 }
-
