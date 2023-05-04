@@ -2,13 +2,15 @@
 
 Project by Giovanni Quevedo, Krimika Keemtee, Aaron Villasenor, Aster Lee, Andrew De La Rosa
 
+Link to Github: https://github.com/GioEpic123/GarageManager
+
 ---
 
 ## Intro
 
 GarageMan is an online garage management system allowing users to make tickets for parking. GarageMan currently supports on-demand tickets (for drive-up parking) and reservations for parking in the future.
 
-GarageMan is built on React.js, using Javascript and Typescript to generate the front end, and uses Firebase firestore for backend api calls.
+GarageMan is built on React.js, using Javascript and Typescript to generate the front end, and uses Firebase firestore for backend api calls. 
 
 ---
 
