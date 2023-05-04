@@ -1,7 +1,7 @@
 # GarageMan
 
 Project by Giovanni Quevedo, Krimika Keemtee, Aaron Villasenor, Aster Lee, Andrew De La Rosa
-https://github.com/GioEpic123/GarageManager
+
 ---
 
 ## Intro
